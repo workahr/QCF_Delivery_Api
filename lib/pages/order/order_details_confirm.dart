@@ -4,7 +4,11 @@ import 'package:namdelivery/constants/app_colors.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
 
+import '../../services/comFuncService.dart';
+import '../../services/nam_food_api_service.dart';
 import '../../widgets/custom_text_field.dart';
+import '../home/home_page.dart';
+import 'orderpickup_model.dart';
 
 class OrderDetailsConfirm extends StatefulWidget {
   @override
@@ -12,9 +16,38 @@ class OrderDetailsConfirm extends StatefulWidget {
 }
 
 class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
+  final NamFoodApiService apiService = NamFoodApiService();
   String? selectedValue = 'cash_on_delivery';
 
   TextEditingController deliverycodeControl = TextEditingController();
+
+  // order pick up status update
+
+  Future updateorderpickupstatus() async {
+    await apiService.getBearerToken();
+
+    Map<String, dynamic> postData = {
+      "order_id": "1",
+      "order_status": "Order Delivered"
+    };
+    print("updateorder $postData");
+    var result = await apiService.updateorderpickupstatus(postData);
+
+    Orderpickstatusmodel response = orderpickstatusmodelFromJson(result);
+
+    if (response.status.toString() == 'SUCCESS') {
+      showInSnackBar(context, response.message.toString());
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    } else {
+      print(response.message.toString());
+      showInSnackBar(context, response.message.toString());
+    }
+  }
 
   void _showcollectcashDialog() {
     showDialog(
@@ -151,12 +184,13 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OrderDetailsConfirm(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => OrderDetailsConfirm(),
+                        //   ),
+                        // );
+                        updateorderpickupstatus();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.red,

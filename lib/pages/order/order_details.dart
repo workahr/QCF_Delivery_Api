@@ -11,13 +11,19 @@ import '../../widgets/custom_text_field.dart';
 import '../home/delivery_order_list_model.dart';
 import '../models/orderpickupdish_model.dart';
 import 'order_details_confirm.dart';
+import 'orderpickup_model.dart';
 
 class OrderDetails extends StatefulWidget {
-   final String orderId;
+  final String orderId;
   CustomerAddress customerAddress;
-    StoreAddress storeAddress;
-     List<OrderItems> orderitems;
-   OrderDetails({super.key, required this.customerAddress,required this.storeAddress, required this.orderitems, required this.orderId});
+  StoreAddress storeAddress;
+  List<OrderItems> orderitems;
+  OrderDetails(
+      {super.key,
+      required this.customerAddress,
+      required this.storeAddress,
+      required this.orderitems,
+      required this.orderId});
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
 }
@@ -125,6 +131,42 @@ class _OrderDetailsState extends State<OrderDetails> {
       return;
     }
 
+// order pick up status update
+
+    Future updateorderpickupstatus() async {
+      await apiService.getBearerToken();
+
+      Map<String, dynamic> postData = {
+        "order_id": "1",
+        "order_status": "Order Picked"
+      };
+      print("updateexpenses $postData");
+      var result = await apiService.updateorderpickupstatus(postData);
+
+      Orderpickstatusmodel response = orderpickstatusmodelFromJson(result);
+
+      if (response.status.toString() == 'SUCCESS') {
+        showInSnackBar(context, response.message.toString());
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderDetailsConfirm(),
+          ),
+        );
+      } else {
+        print(response.message.toString());
+        showInSnackBar(context, response.message.toString());
+      }
+    }
+
+    void _showpickupconfirmDialog() {
+      // Only show the dialog if there are pickup details available
+      if (orderdishdetailspage.isEmpty) {
+        showInSnackBar(context, "No pickup details available.");
+        return;
+      }
+    }
+
     // Show dialog with order details
     showDialog(
       context: context,
@@ -139,71 +181,70 @@ class _OrderDetailsState extends State<OrderDetails> {
           //   ),
           // ),
           content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               // widget.orderitems.map((e) {
-                // return
-                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Pickup ${widget.orderitems.length.toString()} items',
+              // return
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Pickup ${widget.orderitems.length.toString()} items',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.red,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            color: Colors.green,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: Text(
+                            "#${widget.orderId.toString()}",
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 14,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.red,
                             ),
                           ),
-                          SizedBox(width: 8),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              color: Colors.green,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Text(
-                              "#${widget.orderId.toString()}",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                     
-                      ...widget.orderitems.map((e) {
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+
+                    ...widget.orderitems.map((e) {
                       return _buildItemDetailCard(
                         e.quantity.toString(),
                         e.productName.toString(),
                       );
                     }).toList(), //
-                     
-                    ],
-                  ),
-                )
-              ]
-              // }).toList(),
-            ),
+                  ],
+                ),
+              )
+            ]
+                    // }).toList(),
+                    ),
           ),
           actions: [
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderDetailsConfirm(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => OrderDetailsConfirm(),
+                  //   ),
+                  // );
+                  updateorderpickupstatus();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.red,
@@ -360,7 +401,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 SizedBox(height: 4),
                                 Text(
                                   // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                   "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
+                                  "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black),
                                 ),
@@ -378,12 +419,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   fontSize: 18.0,
                                 ),
                                 SizedBox(height: 10),
-                              ...widget.orderitems.map((e) {
-                                  return  HeadingWidget(
-                                    title: "${e.quantity.toString()} x  ${e.productName.toString()}",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0);}),
+                                ...widget.orderitems.map((e) {
+                                  return HeadingWidget(
+                                      title:
+                                          "${e.quantity.toString()} x  ${e.productName.toString()}",
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0);
+                                }),
                                 // SizedBox(height: 5),
                                 // HeadingWidget(
                                 //     title: "1 x  Mushroom Briyani",
@@ -407,8 +450,8 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
 
               Container(
-                padding: EdgeInsets.all(16.0),
-                width: double.infinity,
+                  padding: EdgeInsets.all(16.0),
+                  width: double.infinity,
                   margin: EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -425,11 +468,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  child:
-                   Padding(
+                  child: Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: 
-                      Column(
+                      child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
@@ -471,9 +512,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             )
-                          ]
-                           )
-                          )),
+                          ]))),
             ],
           ),
         ),

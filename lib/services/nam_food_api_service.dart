@@ -1663,4 +1663,28 @@ class NamFoodApiService {
       return e;
     }
   }
+   // Delivery  App Api
+
+  // Order Pick Up Status update
+
+  Future updateorderpickupstatus(postData) async {
+    try {
+      print("test $postData");
+      final url = Uri.parse('${liveApiPath}v1/orderstatusupdate');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
 }

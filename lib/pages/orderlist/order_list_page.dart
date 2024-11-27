@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
+import 'package:namdelivery/widgets/sub_heading_widget.dart';
 
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
+import '../home/delivery_order_list_model.dart';
 import '../models/order_list_model.dart';
 
 class OrderListPage extends StatefulWidget {
@@ -21,70 +23,134 @@ class _OrderListPageState extends State<OrderListPage> {
 @override
 void initState() {
   super.initState();
-  getOrderList();
+  getAllDeliveryBoyOrders();
 }
 
-List<OrderList> orderList = [];
-List<OrderList> orderListAll = [];
-List<OrderList> ordersForToday = []; 
-List<OrderList> ordersNotForToday = [];
+// List<OrderList> orderList = [];
+// List<OrderList> orderListAll = [];
+// List<OrderList> ordersForToday = []; 
+// List<OrderList> ordersNotForToday = [];
 
-bool isLoading = false;
+// bool isLoading = false;
 
-Future getOrderList() async {
-  setState(() {
-    isLoading = true;
-  });
+// Future getOrderList() async {
+//   setState(() {
+//     isLoading = true;
+//   });
 
-  try {
-    var result = await apiService.getOrderList();
-    var response = orderListModelFromJson(result);
+//   try {
+//     var result = await apiService.getOrderList();
+//     var response = orderListModelFromJson(result);
 
-    if (response.status.toString() == 'SUCCESS') {
-      setState(() {
-        orderList = response.list;
-        orderListAll = orderList;
+//     if (response.status.toString() == 'SUCCESS') {
+//       setState(() {
+//         orderList = response.list;
+//         orderListAll = orderList;
 
        
-        String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+//         String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+//         // Filter orders with the current date.
+//         ordersForToday = orderList.where((order) {
+//           return order.createdDate != null &&
+//               DateFormat('yyyy-MM-dd').format(order.createdDate!) == today;
+//         }).toList();
+
+//         // Filter orders with other dates or null dates.
+//         ordersNotForToday = orderList.where((order) {
+//           return order.createdDate == null ||
+//               DateFormat('yyyy-MM-dd').format(order.createdDate!) != today;
+//         }).toList();
+
+//         isLoading = false;
+//         print('Orders for today: $ordersForToday');
+//         print('Orders not for today: $ordersNotForToday');
+//       });
+//     } else {
+//       setState(() {
+//         orderList = [];
+//         orderListAll = [];
+//         ordersForToday = [];
+//         ordersNotForToday = [];
+//         isLoading = false;
+//       });
+//       showInSnackBar(context, response.message.toString());
+//     }
+//   } catch (e) {
+//     setState(() {
+//       orderList = [];
+//       orderListAll = [];
+//       ordersForToday = [];
+//       ordersNotForToday = [];
+//       isLoading = false;
+//     });
+//     showInSnackBar(context, 'Error occurred: $e');
+//   }
+// }
+
+
+bool isLoading = false;
+  List<DeliveryOrderList> orderList = [];
+  List<DeliveryOrderList> orderListAll = [];
+
+  List<DeliveryOrderList> ordersForToday = []; 
+List<DeliveryOrderList> ordersNotForToday = [];
+
+  // double totalDiscountPrice = 0.0;
+
+  double totalEarning = 0;
+  double floatingBalance = 0;
+
+  Future getAllDeliveryBoyOrders() async {
+    await apiService.getBearerToken();
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var result = await apiService.getAllDeliveryBoyOrders();
+      var response = deliveryOrderListModelFromJson(result);
+      if (response.status.toString() == 'SUCCESS') {
+        setState(() {
+          orderList = response.list;
+          orderListAll = orderList;
+          isLoading = false;
+          print(orderListAll);
+                  String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
         // Filter orders with the current date.
-        ordersForToday = orderList.where((order) {
+        ordersForToday = orderListAll.where((order) {
           return order.createdDate != null &&
-              DateFormat('yyyy-MM-dd').format(order.createdDate!) == today;
+              DateFormat('yyyy-MM-dd').format(order.createdDate) == today && order.orderStatus != "New";
         }).toList();
 
         // Filter orders with other dates or null dates.
-        ordersNotForToday = orderList.where((order) {
+        ordersNotForToday = orderListAll.where((order) {
           return order.createdDate == null ||
-              DateFormat('yyyy-MM-dd').format(order.createdDate!) != today;
+              DateFormat('yyyy-MM-dd').format(order.createdDate) != today && order.orderStatus != "New";
         }).toList();
 
-        isLoading = false;
-        print('Orders for today: $ordersForToday');
-        print('Orders not for today: $ordersNotForToday');
-      });
-    } else {
+        });
+      } else {
+        setState(() {
+          orderList = [];
+          orderListAll = [];
+          isLoading = false;
+        });
+        showInSnackBar(context, response.message.toString());
+      }
+    } catch (e) {
       setState(() {
         orderList = [];
         orderListAll = [];
-        ordersForToday = [];
-        ordersNotForToday = [];
         isLoading = false;
       });
-      showInSnackBar(context, response.message.toString());
+      showInSnackBar(context, 'Error occurred: $e');
     }
-  } catch (e) {
-    setState(() {
-      orderList = [];
-      orderListAll = [];
-      ordersForToday = [];
-      ordersNotForToday = [];
-      isLoading = false;
-    });
-    showInSnackBar(context, 'Error occurred: $e');
+
+    setState(() {});
   }
-}
+
 
   @override
 Widget build(BuildContext context) {
@@ -97,7 +163,10 @@ Widget build(BuildContext context) {
       ),
       automaticallyImplyLeading: false,
     ),
-    body: SingleChildScrollView(
+    body:  orderList.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          :
+    SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -108,6 +177,7 @@ Widget build(BuildContext context) {
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
             ),
+            SizedBox(height: 6.0,),
             if(ordersForToday.isNotEmpty)
             ListView.builder(
               shrinkWrap: true,
@@ -118,22 +188,34 @@ Widget build(BuildContext context) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: _buildOrderCard(
-                    orderId: order.orderId.toString(),
-                    time: order.time.toString(),
-                    items: order.items.toString(),
+                    orderId: order.invoiceNumber.toString(),
+                    time: order.prepareMin.toString(),
+                    items: order.items.length.toString(),
                     status: order.orderStatus.toString(),
-                    reachingTime: order.reachingTime.toString(),
+                    //reachingTime: order.reachingTime.toString(),
                     color: AppColors.green,
                   ),
                 );
               },
+            )
+            else
+            //SizedBox(height: 10.0,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SubHeadingWidget(title: "No Today Completed Orders", color: AppColors.black,),
+              ],
             ),
+
+            SizedBox(height: 10.0,),
+            
             if (ordersNotForToday.isNotEmpty) ...[
               HeadingWidget(
                 title: "Yesterday Orders",
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
+               SizedBox(height: 6.0,),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -143,11 +225,11 @@ Widget build(BuildContext context) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: _buildOrderCard(
-                      orderId: order.orderId.toString(),
-                      time: order.time.toString(),
-                      items: order.items.toString(),
+                      orderId: order.invoiceNumber.toString(),
+                      time: order.prepareMin.toString(),
+                      items: order.items.length.toString(),
                       status: order.orderStatus.toString(),
-                      reachingTime: order.reachingTime.toString(),
+                      //reachingTime: order.reachingTime.toString(),
                       color: AppColors.red,
                     ),
                   );
@@ -168,7 +250,7 @@ Widget build(BuildContext context) {
     required String time,
     required String items,
     required String status,
-    required String reachingTime,
+     String? reachingTime="",
     required Color color,
   }) {
     return Container(
@@ -210,7 +292,7 @@ Widget build(BuildContext context) {
                 Row(
                   children: [
                     Text(
-                      "$time | $items  $reachingTime",
+                      "$time mins | $items items $reachingTime",
                       style: TextStyle(
                         color: AppColors.black,
                         fontSize: 14.0,

@@ -280,10 +280,10 @@ class NamFoodApiService {
     }
   }
 
-  // user Login With Otp
-  Future userLoginWithOtp(postData) async {
+  // user Login
+  Future deliveryLogin(postData) async {
     try {
-      final url = Uri.parse('${liveApiPath}v1/mobilelogin');
+      final url = Uri.parse('${liveApiPath}v1/login');
       final response = await client.post(url,
           headers: headerData, body: jsonEncode(postData));
       if (response.statusCode == 200) {
@@ -1623,6 +1623,44 @@ class NamFoodApiService {
     } catch (e) {
       // Handle any errors
       throw Exception('Failed to retrieve TotalEarning: $e');
+    }
+  }
+
+
+    // get DeliveryBoy Earnings
+   Future getDeliveryBoyEarnings() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/getdeliveryboydashboardrecord');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+
+  // get All DeliveryBoyOrders
+   Future getAllDeliveryBoyOrders() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/getallorderbydelivery');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
     }
   }
 }

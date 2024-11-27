@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
 import '../../widgets/heading_widget.dart';
+import '../home/delivery_order_list_model.dart';
 import '../models/trips_list_model.dart';
 
 class TripsListPage extends StatefulWidget {
@@ -21,7 +23,7 @@ class _TripsListPageState extends State<TripsListPage> {
   void initState() {
     super.initState();
 
-    getTripList();
+    getAllDeliveryBoyOrders();
   }
 
   List<TripList> tripList = [];
@@ -64,6 +66,50 @@ class _TripsListPageState extends State<TripsListPage> {
 
     setState(() {});
   }
+
+
+
+  List<DeliveryOrderList> orderList = [];
+  List<DeliveryOrderList> orderListAll = [];
+
+
+  Future getAllDeliveryBoyOrders() async {
+    await apiService.getBearerToken();
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var result = await apiService.getAllDeliveryBoyOrders();
+      var response = deliveryOrderListModelFromJson(result);
+      if (response.status.toString() == 'SUCCESS') {
+        setState(() {
+          orderList = response.list;
+          orderListAll = orderList;
+          isLoading = false;
+          print(orderListAll);
+
+
+        });
+      } else {
+        setState(() {
+          orderList = [];
+          orderListAll = [];
+          isLoading = false;
+        });
+        showInSnackBar(context, response.message.toString());
+      }
+    } catch (e) {
+      setState(() {
+        orderList = [];
+        orderListAll = [];
+        isLoading = false;
+      });
+      showInSnackBar(context, 'Error occurred: $e');
+    }
+
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,21 +137,21 @@ class _TripsListPageState extends State<TripsListPage> {
                 height: 12.0,
               ),
 
-                if(tripList.isNotEmpty)
+                if(orderList.isNotEmpty)
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: tripList.length,
+              itemCount: orderList.length,
               itemBuilder: (context, index) {
-                final order = tripList[index];
+                final order = orderList[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: _buildOrderCard(
-                    orderId: order.orderId.toString(),
-                    time: order.time.toString(),
-                    items: order.items.toString(),
+                    orderId: order.invoiceNumber.toString(),
+                    time: order.prepareMin.toString(),
+                    items: order.items.length.toString(),
                     status: order.orderStatus.toString(),
-                    color: order.orderStatus =="New" ? AppColors.green : AppColors.darkgold,
+                    color: order.orderStatus =="Order Placed" ? AppColors.green : AppColors.darkgold,
                   ),
                 );
               },

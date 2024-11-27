@@ -5,15 +5,40 @@ import 'package:flutter_dash/flutter_dash.dart';
 import 'package:namdelivery/pages/order/order_cancel.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
+import '../home/delivery_order_list_model.dart';
 import 'order_details.dart';
 import 'package:another_stepper/another_stepper.dart';
 
 class OrderConfirmPage extends StatefulWidget {
+  final String orderId;
+  final String time;
+  final String totalPrice;
+  CustomerAddress customerAddress;
+  CustomerDetails customerDetails;
+  StoreAddress storeAddress;
+  List<OrderItems> orderitems;
+  OrderConfirmPage(
+      {super.key,
+      required this.customerAddress,
+      required this.customerDetails,
+      required this.storeAddress,
+      required this.orderitems,
+      required this.orderId,
+      required this.time,
+      required this.totalPrice});
+
   @override
   _OrderConfirmPageState createState() => _OrderConfirmPageState();
 }
 
 class _OrderConfirmPageState extends State<OrderConfirmPage> {
+  final NamFoodApiService apiService = NamFoodApiService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   List<StepperData> stepperData = [
     StepperData(
       iconWidget: Container(
@@ -151,7 +176,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  "Order ID",
+                                                  "Order ID ",
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -159,7 +184,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  " #123456789",
+                                                  widget.orderId.toString(),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -168,14 +193,14 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 8),
-                                            Text(
-                                              "2.5km   10mins",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[700],
-                                              ),
-                                            )
+                                            // SizedBox(height: 8),
+                                            // Text(
+                                            //   widget.time.toString(),
+                                            //   style: TextStyle(
+                                            //     fontSize: 14,
+                                            //     color: Colors.grey[700],
+                                            //   ),
+                                            // )
                                           ]),
                                       Container(
                                         decoration: BoxDecoration(
@@ -186,7 +211,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 18, vertical: 8),
                                         child: Text(
-                                          "₹60",
+                                          widget.totalPrice.toString(),
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
@@ -206,7 +231,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       ),
                                     ),
                                     Text(
-                                      "10mins",
+                                      "${widget.time.toString()}mins",
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.green,
@@ -326,7 +351,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "Hotel Sangeetha's",
+                                    widget.storeAddress.name.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -334,13 +359,14 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "Contact : 1234567890",
+                                    "Contact : ${widget.storeAddress.mobile}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -367,7 +393,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "Hotel Sangeetha's",
+                                     widget.customerDetails.fullname.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -375,13 +401,13 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "Contact : 1234567890",
+                                  "Contact : ${widget.customerDetails.mobile.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -407,7 +433,12 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OrderDetails(),
+                      builder: (context) => OrderDetails(
+                        customerAddress: widget.customerAddress,
+                        storeAddress: widget.storeAddress,
+                        orderId: widget.orderId,
+                        orderitems: widget.orderitems,
+                      ),
                     ),
                   );
                 },

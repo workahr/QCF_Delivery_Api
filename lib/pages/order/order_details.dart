@@ -8,10 +8,16 @@ import 'package:namdelivery/widgets/heading_widget.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
 import '../../widgets/custom_text_field.dart';
+import '../home/delivery_order_list_model.dart';
 import '../models/orderpickupdish_model.dart';
 import 'order_details_confirm.dart';
 
 class OrderDetails extends StatefulWidget {
+   final String orderId;
+  CustomerAddress customerAddress;
+    StoreAddress storeAddress;
+     List<OrderItems> orderitems;
+   OrderDetails({super.key, required this.customerAddress,required this.storeAddress, required this.orderitems, required this.orderId});
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
 }
@@ -135,8 +141,10 @@ class _OrderDetailsState extends State<OrderDetails> {
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: orderdishdetailspage.map((e) {
-                return Padding(
+              children: [
+              // widget.orderitems.map((e) {
+                // return
+                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,9 +152,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                       Row(
                         children: [
                           Text(
-                            'Pickup ${e.pickupItemsCount} items',
+                            'Pickup ${widget.orderitems.length.toString()} items',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: AppColors.red,
                             ),
@@ -160,7 +168,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Text(
-                              "#${e.orderId}",
+                              "#${widget.orderId.toString()}",
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.white,
@@ -171,24 +179,19 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ],
                       ),
                       SizedBox(height: 15),
-                      if (e.itemsqty1 != null && e.itemsname1 != null)
-                        _buildItemDetailCard(e.itemsqty1, e.itemsname1),
-                      if (e.itemsqty2 != null && e.itemsname2 != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child:
-                              _buildItemDetailCard(e.itemsqty2, e.itemsname2),
-                        ),
-                      if (e.itemsqty3 != null && e.itemsname3 != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child:
-                              _buildItemDetailCard(e.itemsqty3, e.itemsname3),
-                        ),
+                     
+                      ...widget.orderitems.map((e) {
+                      return _buildItemDetailCard(
+                        e.quantity.toString(),
+                        e.productName.toString(),
+                      );
+                    }).toList(), //
+                     
                     ],
                   ),
-                );
-              }).toList(),
+                )
+              ]
+              // }).toList(),
             ),
           ),
           actions: [
@@ -226,6 +229,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(bottom: 10.0),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(12),
@@ -311,7 +315,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   Text(
-                                    "#1234567890",
+                                    widget.orderId.toString(),
                                     style: TextStyle(
                                         color: AppColors.red,
                                         fontWeight: FontWeight.bold,
@@ -347,7 +351,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     )),
                                 SizedBox(height: 8),
                                 Text(
-                                  "Hotel Sangeetha's",
+                                  widget.storeAddress.name.toString(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -355,13 +359,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                  // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                   "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  "Contact : 1234567890",
+                                  "Contact : ${widget.storeAddress.mobile}",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black),
                                 ),
@@ -373,23 +378,24 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   fontSize: 18.0,
                                 ),
                                 SizedBox(height: 10),
-                                HeadingWidget(
-                                    title: "1 x  Chicken Briyani",
+                              ...widget.orderitems.map((e) {
+                                  return  HeadingWidget(
+                                    title: "${e.quantity.toString()} x  ${e.productName.toString()}",
                                     color: AppColors.black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                                SizedBox(height: 5),
-                                HeadingWidget(
-                                    title: "1 x  Mushroom Briyani",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                                SizedBox(height: 5),
-                                HeadingWidget(
-                                    title: "1 x  Mutton Briyani",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
+                                    fontSize: 16.0);}),
+                                // SizedBox(height: 5),
+                                // HeadingWidget(
+                                //     title: "1 x  Mushroom Briyani",
+                                //     color: AppColors.black,
+                                //     fontWeight: FontWeight.bold,
+                                //     fontSize: 16.0),
+                                // SizedBox(height: 5),
+                                // HeadingWidget(
+                                //     title: "1 x  Mutton Briyani",
+                                //     color: AppColors.black,
+                                //     fontWeight: FontWeight.bold,
+                                //     fontSize: 16.0),
                               ],
                             ),
                           ),
@@ -401,6 +407,8 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
 
               Container(
+                padding: EdgeInsets.all(16.0),
+                width: double.infinity,
                   margin: EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -417,9 +425,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
+                  child:
+                   Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: 
+                      Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
@@ -441,17 +451,17 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8),
-                            Text(
-                              "Hotel Sangeetha's",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            //SizedBox(height: 8),
+                            // Text(
+                            //   "Hotel Sangeetha's",
+                            //   style: TextStyle(
+                            //     fontSize: 16,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             SizedBox(height: 4),
                             Text(
-                              "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                              "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             ),
@@ -461,7 +471,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             )
-                          ]))),
+                          ]
+                           )
+                          )),
             ],
           ),
         ),

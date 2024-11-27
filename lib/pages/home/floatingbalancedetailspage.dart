@@ -7,10 +7,30 @@ import '../../widgets/button_widget.dart';
 import '../../widgets/heading_widget.dart';
 
 import '../../constants/constants.dart';
+import '../../widgets/sub_heading_widget.dart';
 import '../models/floatingorderdetails_model.dart';
+import 'delivery_order_list_model.dart';
 
 class Floatingbalancedetailspage extends StatefulWidget {
-  const Floatingbalancedetailspage({super.key});
+  final String orderId;
+  final String time;
+  final String totalPrice;
+    final String CreatedDate;
+  CustomerAddress customerAddress;
+  StoreAddress storeAddress;
+  CustomerDetails customerDetails;
+  List<OrderItems> orderitems;
+  Floatingbalancedetailspage(
+      {super.key,
+      required this.customerAddress,
+      required this.customerDetails,
+      required this.storeAddress,
+      required this.orderitems,
+      required this.orderId,
+      required this.time,
+      required this.CreatedDate,
+      required this.totalPrice});
+
 
   @override
   State<Floatingbalancedetailspage> createState() =>
@@ -84,12 +104,12 @@ class _FloatingbalancedetailspageState
               Row(
                 children: [
                   HeadingWidget(
-                    title: 'Order',
-                    fontWeight: FontWeight.w500,
+                    title: 'Order ID',
+                    fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(width: 6),
                   HeadingWidget(
-                    title: '#123456789',
+                     title: widget.orderId.toString(),
                     color: AppColors.red,
                   ),
                 ],
@@ -112,17 +132,11 @@ class _FloatingbalancedetailspageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            HeadingWidget(
-                              title: '2.5km',
-                            ),
-                            const SizedBox(width: 8),
-                            HeadingWidget(
-                              title: '10mints',
-                            ),
-                          ],
-                        ),
+                       SubHeadingWidget(
+                                  title: '${widget.time.toString()} mins',
+                                  color: AppColors.black,
+                                  fontSize: 16.0,
+                                ),
                         const SizedBox(height: 6),
                         Row(
                           children: [
@@ -131,14 +145,14 @@ class _FloatingbalancedetailspageState
                             ),
                             const SizedBox(width: 8),
                             HeadingWidget(
-                              title: '10/12/2024',
+                              title: widget.CreatedDate.toString(),
                             ),
                           ],
                         ),
                       ],
                     ),
                     ButtonWidget(
-                      title: '₹605',
+                      title: widget.totalPrice.toString(),
                       width: 70,
                       color: AppColors.red,
                       onTap: () {},
@@ -213,7 +227,7 @@ class _FloatingbalancedetailspageState
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "Hotel Sangeetha's",
+                             widget.storeAddress.name.toString(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -221,13 +235,14 @@ class _FloatingbalancedetailspageState
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                            //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                            "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.black),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "Contact : 1234567890",
+                          "Contact : ${widget.storeAddress.mobile}",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.black),
                           ),
@@ -250,7 +265,7 @@ class _FloatingbalancedetailspageState
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "Hotel Sangeetha's",
+                           widget.customerDetails.fullname.toString(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -258,13 +273,13 @@ class _FloatingbalancedetailspageState
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                           "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.black),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "Contact : 1234567890",
+                            "Contact : ${widget.customerDetails.mobile.toString()}",
                             style: const TextStyle(
                                 fontSize: 14, color: Colors.black),
                           ),
@@ -293,25 +308,27 @@ class _FloatingbalancedetailspageState
                       color: AppColors.red,
                     ),
                     const SizedBox(height: 8),
+                    if(widget.orderitems.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: floatingorder.length,
+                      itemCount: widget.orderitems.length,
                       itemBuilder: (context, index) {
-                        final e = floatingorder[index];
+                        final e = widget.orderitems[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Row(
                             children: [
                               HeadingWidget(
-                                title: e.item.toString(),
+                                title: e.productName.toString(),
                               ),
+                              const SizedBox(width: 6),
                               HeadingWidget(
                                 title: 'X',
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 6),
                               HeadingWidget(
-                                title: e.dish.toString(),
+                                title: e.quantity.toString(),
                               ),
                             ],
                           ),

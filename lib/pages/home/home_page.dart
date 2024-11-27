@@ -8,6 +8,8 @@ import '../../services/nam_food_api_service.dart';
 import '../../widgets/sub_heading_widget.dart';
 import '../models/dashboard_order_list_model.dart';
 import '../order/orderconfirm_page.dart';
+import 'dashboard_delivery_model.dart';
+import 'delivery_order_list_model.dart';
 import 'totalearnings.dart';
 import 'totalfloatingbalance.dart';
 
@@ -27,34 +29,39 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    getDashboardOrderlist();
+    getDeliveryBoyEarnings();
+    getAllDeliveryBoyOrders();
   }
 
-  List<DashboardOrderList> orderList = [];
-  List<DashboardOrderList> orderListAll = [];
-
   bool isLoading = false;
+
+  List<DeliveryOrderList> orderList = [];
+  List<DeliveryOrderList> orderListAll = [];
+
   // double totalDiscountPrice = 0.0;
 
   double totalEarning = 0;
   double floatingBalance = 0;
 
-  Future getDashboardOrderlist() async {
+  Future getAllDeliveryBoyOrders() async {
+    await apiService.getBearerToken();
     setState(() {
       isLoading = true;
     });
 
     try {
-      var result = await apiService.getDashboardOrderlist();
-      var response = dashboardOrderListModelFromJson(result);
+      var result = await apiService.getAllDeliveryBoyOrders();
+      var response = deliveryOrderListModelFromJson(result);
       if (response.status.toString() == 'SUCCESS') {
         setState(() {
           orderList = response.list;
           orderListAll = orderList;
           isLoading = false;
           print(orderListAll);
-          totalEarning = response.totalEarning;
-          floatingBalance = response.floatingBalance;
+        //    orderList = orderListAll.where((order) {
+        //   return order.orderStatus != null &&
+        //       order.orderStatus  == "Order Placed";
+        // }).toList();
         });
       } else {
         setState(() {
@@ -68,6 +75,42 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         orderList = [];
         orderListAll = [];
+        isLoading = false;
+      });
+      showInSnackBar(context, 'Error occurred: $e');
+    }
+
+    setState(() {});
+  }
+
+  DeliveryEarningData? deliveryBoyDetails;
+
+  double totalDiscountPrice = 0.0;
+
+  Future getDeliveryBoyEarnings() async {
+    await apiService.getBearerToken();
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var result = await apiService.getDeliveryBoyEarnings();
+      var response = dashboardDeliveryModelFromJson(result);
+      if (response.status.toString() == 'SUCCESS') {
+        setState(() {
+          deliveryBoyDetails = response.list;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          deliveryBoyDetails = null;
+          isLoading = false;
+        });
+        showInSnackBar(context, response.message.toString());
+      }
+    } catch (e) {
+      setState(() {
+        deliveryBoyDetails = null;
         isLoading = false;
       });
       showInSnackBar(context, 'Error occurred: $e');
@@ -153,84 +196,98 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  _buildCard(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => Totalearnings(),
-                        ),
-                      );
-                    },
-                    imagePath: AppAssets.earningsIcon,
-                    amount:
-                        curFormatWithDecimal(value: emptyToZero(totalEarning))
-                            .toString(),
-                    label: "Total earnings",
-                  ),
-                  SizedBox(width: 12.0),
-                  _buildCard(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => Totalfloatingbalance(),
-                        ),
-                      );
-                    },
-                    imagePath: AppAssets.dollarIcon,
-                    amount: curFormatWithDecimal(
-                            value: emptyToZero(floatingBalance))
-                        .toString(),
-                    label: "Floating balance",
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 20.0),
-              // Recent Orders Heading
-              Text(
-                "Recent Orders",
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 12.0),
-              //Orders List
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: ListView.builder(
-                  itemCount: orderList.length,
-                  itemBuilder: (context, index) {
-                    final order = orderList[index];
-                    return Column(
+      body: deliveryBoyDetails == null
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        _buildOrderCard(
-                          orderId: order.orderId.toString(),
-                          time: order.time.toString(),
-                          items: order.items.toString(),
-                          status: order.orderStatus.toString(),
-                        ),
-                        SizedBox(height: 12.0),
+                        if (deliveryBoyDetails != null)
+                          _buildCard(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Totalearnings(),
+                                ),
+                              );
+                            },
+                            imagePath: AppAssets.earningsIcon,
+                            amount: curFormatWithDecimal(
+                                    value:
+                                        emptyToZero(deliveryBoyDetails!.myEarn))
+                                .toString(),
+                            label: "Total earnings",
+                          ),
+                        SizedBox(width: 12.0),
+                        if (deliveryBoyDetails != null)
+                          _buildCard(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Totalfloatingbalance(),
+                                ),
+                              );
+                            },
+                            imagePath: AppAssets.dollarIcon,
+                            amount: curFormatWithDecimal(
+                                    value:
+                                        emptyToZero(deliveryBoyDetails!.cash))
+                                .toString(),
+                            label: "Floating balance",
+                          ),
                       ],
-                    );
-                  },
+                    ),
+
+                    SizedBox(height: 20.0),
+                    // Recent Orders Heading
+                    Text(
+                      "Recent Orders",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: 12.0),
+                    //Orders List
+                    if (orderList.isNotEmpty)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: ListView.builder(
+                          itemCount: orderList.length,
+                          itemBuilder: (context, index) {
+                            final order = orderList[index];
+                            return Column(
+                              children: [
+                                _buildOrderCard(
+                                    orderId: order.invoiceNumber.toString(),
+                                    time: order.prepareMin.toString(),
+                                    items: order.items.length.toString(),
+                                    status: order.orderStatus.toString(),
+                                    customerAddress: order.customerAddress,
+                                    storeAddress: order.storeAddress,
+                                    totalPrice: order.totalPrice.toString(),
+                                    orderitems: order.items,
+                                    customerDetails: order.customerDetails
+                                    ),
+                                SizedBox(height: 12.0),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                      else
+                   Center(child: SubHeadingWidget(title: "No Recent Orders",color: AppColors.black,))
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 
@@ -300,18 +357,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Widget for Recent Orders Card
-  Widget _buildOrderCard({
-    required String orderId,
-    required String time,
-    required String items,
-    required String status,
-  }) {
+  Widget _buildOrderCard(
+      {required String orderId,
+      required String time,
+      required String items,
+      required String status,
+       required  List<OrderItems> orderitems,
+      required CustomerAddress customerAddress,
+       required CustomerDetails customerDetails,
+      required StoreAddress storeAddress,
+      String? totalPrice}) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OrderConfirmPage(),
+              builder: (_) => OrderConfirmPage(
+                customerAddress: customerAddress,
+                storeAddress: storeAddress,
+                orderId: orderId,
+                time: time,
+                totalPrice: totalPrice.toString(),
+                orderitems: orderitems,
+                customerDetails: customerDetails,
+              ),
             ),
           );
         },

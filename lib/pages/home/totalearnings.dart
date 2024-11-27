@@ -10,6 +10,7 @@ import '../../widgets/button_widget.dart';
 import '../../widgets/sub_heading_widget.dart';
 import '../balance/earnings_detail_page.dart';
 import '../models/totalearning_model.dart';
+import 'delivery_order_list_model.dart';
 
 class Totalearnings extends StatefulWidget {
   const Totalearnings({super.key});
@@ -25,62 +26,63 @@ class _TotalearningsState extends State<Totalearnings> {
   void initState() {
     super.initState();
 
-    gettotalearning();
+    getAllDeliveryBoyOrders();
   }
 
-  //orderdetails
-  List<Earnings> earnings = [];
-  List<Earnings> earningsAll = [];
-  List<Earnings> earningsForToday = [];
-  List<Earnings> earningsNotForToday = [];
   bool isLoading = false;
 
-  Future gettotalearning() async {
+  List<DeliveryOrderList> orderList = [];
+  List<DeliveryOrderList> orderListAll = [];
+
+  List<DeliveryOrderList> ordersForToday = [];
+  List<DeliveryOrderList> ordersNotForToday = [];
+
+  // double totalDiscountPrice = 0.0;
+
+  double totalEarning = 0;
+  double floatingBalance = 0;
+
+  Future getAllDeliveryBoyOrders() async {
+    await apiService.getBearerToken();
     setState(() {
       isLoading = true;
     });
 
     try {
-      var result = await apiService.gettotalearning();
-      var response = totalearningmodelFromJson(result);
+      var result = await apiService.getAllDeliveryBoyOrders();
+      var response = deliveryOrderListModelFromJson(result);
       if (response.status.toString() == 'SUCCESS') {
         setState(() {
-          earnings = response.list;
-          earningsAll = earnings;
-
+          orderList = response.list;
+          orderListAll = orderList;
+          isLoading = false;
+          print(orderListAll);
           String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
           // Filter orders with the current date.
-          earningsForToday = earnings.where((order) {
+          ordersForToday = orderListAll.where((order) {
             return order.createdDate != null &&
-                DateFormat('yyyy-MM-dd').format(order.createdDate!) == today;
+                DateFormat('yyyy-MM-dd').format(order.createdDate) == today;
           }).toList();
 
           // Filter orders with other dates or null dates.
-          earningsNotForToday = earnings.where((order) {
+          ordersNotForToday = orderListAll.where((order) {
             return order.createdDate == null ||
-                DateFormat('yyyy-MM-dd').format(order.createdDate!) != today;
+                DateFormat('yyyy-MM-dd').format(order.createdDate) != today;
           }).toList();
-          isLoading = false;
-          print('Orders for today: $earningsForToday');
-          print('Orders not for today: $earningsNotForToday');
         });
       } else {
         setState(() {
-          earnings = [];
-          earningsAll = [];
-          earningsForToday = [];
-          earningsNotForToday = [];
+          orderList = [];
+          orderListAll = [];
           isLoading = false;
         });
         showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
-        earnings = [];
-        earningsAll = [];
-        earningsForToday = [];
-        earningsNotForToday = [];
+        orderList = [];
+        orderListAll = [];
         isLoading = false;
       });
       showInSnackBar(context, 'Error occurred: $e');
@@ -95,7 +97,7 @@ class _TotalearningsState extends State<Totalearnings> {
       appBar: AppBar(
         //backgroundColor: AppColors.grey,
         title: HeadingWidget(
-          title: 'Total earnings',
+          title: 'Total Earnings',
         ),
       ),
       body: SingleChildScrollView(
@@ -105,35 +107,55 @@ class _TotalearningsState extends State<Totalearnings> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HeadingWidget(
-                title: "Today Orders",
+                title: "Today Earnings",
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(
                 height: 10,
               ),
-              if (earningsForToday.isNotEmpty)
+              if (ordersForToday.isNotEmpty)
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: earningsForToday.length,
+                  itemCount: ordersForToday.length,
                   itemBuilder: (context, index) {
-                    final earning = earningsForToday[index];
+                    final earning = ordersForToday[index];
+                    String createDate =
+                        DateFormat('dd-MM-yyyy').format(earning.createdDate);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: _buildOrderCard(
-                        orderId: earning.orderid.toString(),
-                        time: earning.time.toString(),
-                        items: earning.item.toString(),
-                        status: earning.earningstatus.toString(),
-                        color: AppColors.red,
-                      ),
+                          orderId: earning.invoiceNumber.toString(),
+                          time: earning.prepareMin.toString(),
+                          items: earning.items.length.toString(),
+                          status: earning.deliveryCharges.toString(),
+                          color: AppColors.red,
+                          customerAddress: earning.customerAddress,
+                          storeAddress: earning.storeAddress,
+                           customerDetails: earning.customerDetails,
+                          orderitems: earning.items,
+                          createdDate: createDate.toString()),
                     );
                   },
+                )
+              else
+                //SizedBox(height: 10.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SubHeadingWidget(
+                      title: "No Today Earnings",
+                      color: AppColors.black,
+                    ),
+                  ],
                 ),
-              if (earningsForToday.isNotEmpty) ...[
+              SizedBox(
+                height: 10.0,
+              ),
+              if (ordersNotForToday.isNotEmpty) ...[
                 HeadingWidget(
-                  title: "Yesterday Orders",
+                  title: "Yesterday Earnings",
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -143,18 +165,24 @@ class _TotalearningsState extends State<Totalearnings> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: earningsForToday.length,
+                  itemCount: ordersNotForToday.length,
                   itemBuilder: (context, index) {
-                    final earning = earningsForToday[index];
+                    final earning = ordersNotForToday[index];
+                    String createDate =
+                        DateFormat('dd-MM-yyyy').format(earning.createdDate);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: _buildOrderCard(
-                        orderId: earning.orderid.toString(),
-                        time: earning.time.toString(),
-                        status: earning.earningstatus.toString(),
-                        items: earning.item.toString(),
-                        color: AppColors.red,
-                      ),
+                          orderId: earning.invoiceNumber.toString(),
+                          time: earning.prepareMin.toString(),
+                          items: earning.items.length.toString(),
+                          status: earning.deliveryCharges.toString(),
+                          color: AppColors.red,
+                          customerAddress: earning.customerAddress,
+                          storeAddress: earning.storeAddress,
+                          customerDetails: earning.customerDetails,
+                          orderitems: earning.items,
+                          createdDate: createDate.toString()),
                     );
                   },
                 ),
@@ -165,79 +193,102 @@ class _TotalearningsState extends State<Totalearnings> {
       ),
     );
   }
-}
 
-// Widget for Recent Orders Card
-Widget _buildOrderCard({
-  required String orderId,
-  required String time,
-  required String items,
-  required String status,
-  required Color color,
-}) {
-  return Container(
-    padding: EdgeInsets.all(16.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12.0),
-      border: Border.all(color: AppColors.lightGrey3, width: 1.5),
-    ),
-    child: Row(
-      children: [
-        // Order Details
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  // Widget for Recent Orders Card
+  Widget _buildOrderCard({
+    required String orderId,
+    required String time,
+    required String items,
+    required String status,
+    required String createdDate,
+    required Color color,
+    required List<OrderItems> orderitems,
+    required CustomerAddress customerAddress,
+     required CustomerDetails customerDetails,
+    required StoreAddress storeAddress,
+  }) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => EarningsDetailPage(
+                customerAddress: customerAddress,
+                storeAddress: storeAddress,
+                customerDetails: customerDetails,
+                orderId: orderId.toString(),
+                time: time.toString(),
+                deliveryCharges: status.toString(),
+                orderitems: orderitems,
+                CreatedDate: createdDate.toString(),
+              ),
+            ),
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(color: AppColors.lightGrey3, width: 1.5),
+          ),
+          child: Row(
             children: [
-              Row(
-                children: [
-                  HeadingWidget(
-                    title: "Order ID ",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+              // Order Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        HeadingWidget(
+                          title: "Order ID ",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 16.0,
+                        ),
+                        HeadingWidget(
+                          title: orderId.toString(),
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.red,
+                          fontSize: 17.0,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        Text(
+                          "${time}PM" ' | ' "${items}items",
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              // Status Badge
+
+              SizedBox(width: 8.0),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  "₹ ${status}",
+                  style: TextStyle(
+                    color: Colors.white,
                     fontSize: 16.0,
                   ),
-                  HeadingWidget(
-                    title: orderId.toString(),
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.red,
-                    fontSize: 17.0,
-                  ),
-                ],
+                ),
               ),
-              SizedBox(height: 4.0),
-              Row(
-                children: [
-                  Text(
-                    "${time}PM" ' | ' "${items}items",
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
-        ),
-        // Status Badge
-
-        SizedBox(width: 8.0),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            "₹ ${status}",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+        ));
+  }
 }

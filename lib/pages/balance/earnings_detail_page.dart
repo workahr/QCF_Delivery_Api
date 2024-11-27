@@ -5,9 +5,27 @@ import 'package:namdelivery/widgets/heading_widget.dart';
 import '../../constants/app_assets.dart';
 import '../../constants/app_colors.dart';
 import '../../widgets/sub_heading_widget.dart';
+import '../home/delivery_order_list_model.dart';
 
 class EarningsDetailPage extends StatefulWidget {
-  const EarningsDetailPage({super.key});
+  final String orderId;
+  final String time;
+  final String deliveryCharges;
+    final String CreatedDate;
+  CustomerAddress customerAddress;
+  StoreAddress storeAddress;
+  CustomerDetails customerDetails;
+  List<OrderItems> orderitems;
+  EarningsDetailPage(
+      {super.key,
+      required this.customerAddress,
+      required this.customerDetails,
+      required this.storeAddress,
+      required this.orderitems,
+      required this.orderId,
+      required this.time,
+      required this.CreatedDate,
+      required this.deliveryCharges});
 
   @override
   State<EarningsDetailPage> createState() => _EarningsDetailPageState();
@@ -36,7 +54,7 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                       width: 3.0,
                     ),
                     HeadingWidget(
-                      title: "#12345678",
+                      title: widget.orderId.toString(),
                       color: AppColors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 17.0,
@@ -63,13 +81,13 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SubHeadingWidget(
-                                  title: "2.5km 10mins",
+                                  title: '${widget.time.toString()} mins',
                                   color: AppColors.black,
                                   fontSize: 16.0,
                                 ),
                                 SizedBox(height: 4.0),
                                 SubHeadingWidget(
-                                  title: "Date: 10/05/2025",
+                                  title: "Date:${widget.CreatedDate.toString()}",
                                   color: AppColors.black,
                                   fontSize: 16.0,
                                 ),
@@ -87,7 +105,7 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                               borderRadius: BorderRadius.circular(18.0),
                             ),
                             child: HeadingWidget(
-                              title: "₹60",
+                              title: widget.deliveryCharges.toString(),
                               color: Colors.white,
                               fontSize: 17.0,
                             ),
@@ -180,7 +198,7 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "Hotel Sangeetha's",
+                                    widget.storeAddress.name.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -188,13 +206,14 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "Contact : 1234567890",
+                                   "Contact : ${widget.storeAddress.mobile}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -222,7 +241,7 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "Hotel Sangeetha's",
+                                    widget.customerDetails.fullname.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -230,13 +249,13 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                   "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    "Contact : 1234567890",
+                                    "Contact : ${widget.customerDetails.mobile.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),

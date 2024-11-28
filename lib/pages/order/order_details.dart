@@ -15,23 +15,26 @@ import 'orderpickup_model.dart';
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
+  final String totalPrice;
   CustomerAddress customerAddress;
+  CustomerDetails customerDetails;
   StoreAddress storeAddress;
   List<OrderItems> orderitems;
   OrderDetails(
       {super.key,
       required this.customerAddress,
+      required this.customerDetails,
       required this.storeAddress,
       required this.orderitems,
-      required this.orderId});
+      required this.orderId,
+      required this.totalPrice
+      });
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
   final NamFoodApiService apiService = NamFoodApiService();
-  List<OrderdeatilsList> orderdishdetailspage = [];
-  List<OrderdeatilsList> orderdishdetailspageAll = [];
   bool isLoading = false;
 
   List<StepperData> stepperData = [
@@ -81,52 +84,13 @@ class _OrderDetailsState extends State<OrderDetails> {
   void initState() {
     super.initState();
     // Call the method to fetch pickup dish list when the screen is initialized
-    getpickupdishlist();
   }
 
-  Future<void> getpickupdishlist() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      var result = await apiService.getpickupdishlist(); // Fetch the raw JSON
-      print('API Response: $result'); // Log the API response
-      var response = orderpickupdishlistmodelFromJson(
-          result); // Parse JSON into your model
-
-      // Check for the "SUCCESS" status
-      if (response.status == "SUCCESS") {
-        // Successfully fetched the data, update state
-        setState(() {
-          orderdishdetailspage = response.list;
-          orderdishdetailspageAll = response.list;
-          isLoading = false;
-        });
-        print("Fetched list: $orderdishdetailspage");
-      } else {
-        // Handle error if the status is not "SUCCESS"
-        setState(() {
-          orderdishdetailspage = [];
-          orderdishdetailspageAll = [];
-          isLoading = false;
-        });
-        showInSnackBar(context, response.message.toString());
-      }
-    } catch (e) {
-      // Handle any error that might occur during the API call
-      setState(() {
-        orderdishdetailspage = [];
-        orderdishdetailspageAll = [];
-        isLoading = false;
-      });
-      showInSnackBar(context, 'Error occurred: $e');
-    }
-  }
+ 
 
   void _showpickupconfirmDialog() {
     // Only show the dialog if there are pickup details available
-    if (orderdishdetailspage.isEmpty) {
+    if (widget.orderitems.isEmpty) {
       showInSnackBar(context, "No pickup details available.");
       return;
     }
@@ -150,7 +114,13 @@ class _OrderDetailsState extends State<OrderDetails> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OrderDetailsConfirm(),
+            builder: (context) => OrderDetailsConfirm(
+              orderId: widget.orderId.toString(),
+              customerAddress: widget.customerAddress,
+              customerDetails: widget.customerDetails,
+              orderitems: widget.orderitems,
+              totalPrice: widget.totalPrice,
+            ),
           ),
         );
       } else {
@@ -161,7 +131,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     void _showpickupconfirmDialog() {
       // Only show the dialog if there are pickup details available
-      if (orderdishdetailspage.isEmpty) {
+      if (widget.orderitems.isEmpty) {
         showInSnackBar(context, "No pickup details available.");
         return;
       }
@@ -493,13 +463,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                               ),
                             ),
                             //SizedBox(height: 8),
-                            // Text(
-                            //   "Hotel Sangeetha's",
-                            //   style: TextStyle(
-                            //     fontSize: 16,
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            // ),
+                            Text(
+                                     widget.customerDetails.fullname.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                             SizedBox(height: 4),
                             Text(
                               "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
@@ -508,7 +478,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "Contact : 1234567890",
+                              "Contact : ${widget.customerDetails.mobile.toString()}",
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black),
                             )

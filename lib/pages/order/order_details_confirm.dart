@@ -7,10 +7,25 @@ import 'package:namdelivery/widgets/heading_widget.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
 import '../../widgets/custom_text_field.dart';
+import '../home/delivery_order_list_model.dart';
 import '../home/home_page.dart';
 import 'orderpickup_model.dart';
 
 class OrderDetailsConfirm extends StatefulWidget {
+  final String orderId;
+  final String totalPrice;
+  CustomerAddress customerAddress;
+  CustomerDetails customerDetails;
+  List<OrderItems> orderitems;
+  OrderDetailsConfirm({
+    super.key,
+    required this.customerAddress,
+    required this.customerDetails,
+    required this.orderitems,
+    required this.orderId,
+     required this.totalPrice
+  });
+
   @override
   _OrderDetailsConfirmState createState() => _OrderDetailsConfirmState();
 }
@@ -60,7 +75,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
               style: TextStyle(fontSize: 18),
             ),
             Text(
-              "#1234567890",
+              widget.orderId.toString(),
               style: TextStyle(
                   color: AppColors.red,
                   fontWeight: FontWeight.bold,
@@ -77,7 +92,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                         fontWeight: FontWeight.bold,
                         fontSize: 16)),
                 SizedBox(height: 8),
-                Text("₹" "300.00",
+                Text("₹" "${widget.totalPrice}",
                     style: TextStyle(
                         color: AppColors.black,
                         fontWeight: FontWeight.bold,
@@ -232,7 +247,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(
-                  "#1234567890",
+                  widget.orderId.toString(),
                   style: TextStyle(
                       color: AppColors.red,
                       fontWeight: FontWeight.bold,
@@ -337,7 +352,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                     ]),
                                 SizedBox(height: 8),
                                 Text(
-                                  "Krishnamoorthy",
+                                  widget.customerDetails.fullname.toString(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -345,13 +360,13 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                  "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  "Contact : 1234567890",
+                                  "Contact : ${widget.customerDetails.mobile.toString()}",
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.black,
@@ -365,23 +380,14 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                   fontSize: 18.0,
                                 ),
                                 SizedBox(height: 10),
-                                HeadingWidget(
-                                    title: "1 x  Chicken Briyani",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                                SizedBox(height: 5),
-                                HeadingWidget(
-                                    title: "1 x  Mushroom Briyani",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                                SizedBox(height: 5),
-                                HeadingWidget(
-                                    title: "1 x  Mutton Briyani",
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
+                                ...widget.orderitems.map((e) {
+                                  return HeadingWidget(
+                                      title:
+                                          "${e.quantity} x  ${e.productName}",
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0);
+                                }).toList(), //
                               ],
                             ),
                           ),

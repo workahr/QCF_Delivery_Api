@@ -438,6 +438,8 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                         storeAddress: widget.storeAddress,
                         orderId: widget.orderId,
                         orderitems: widget.orderitems,
+                        customerDetails: widget.customerDetails,
+                        totalPrice: widget.totalPrice,
                       ),
                     ),
                   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
 
 import '../../constants/app_assets.dart';
@@ -28,9 +29,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    print("1");
     getDeliveryBoyEarnings();
+    print("2");
     getAllDeliveryBoyOrders();
+    print("3");
   }
 
   bool isLoading = false;
@@ -43,6 +46,24 @@ class _HomePageState extends State<HomePage> {
   double totalEarning = 0;
   double floatingBalance = 0;
 
+  String dateFormat(dynamic date) {
+    DateTime dateTime = date is DateTime ? date : DateTime.parse(date);
+
+    String formattedTime = DateFormat('h:mm a').format(dateTime).toLowerCase();
+    String formattedDate = DateFormat('dd-MMM-yyyy').format(dateTime);
+
+    return "$formattedDate";
+  }
+
+  String dateFormattime(dynamic date) {
+    DateTime dateTime = date is DateTime ? date : DateTime.parse(date);
+
+    String formattedTime = DateFormat('h:mm a').format(dateTime).toLowerCase();
+    String formattedDate = DateFormat('dd-MMM-yyyy').format(dateTime);
+
+    return "$formattedTime";
+  }
+
   Future getAllDeliveryBoyOrders() async {
     await apiService.getBearerToken();
     setState(() {
@@ -50,18 +71,20 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
+      print("4");
       var result = await apiService.getAllDeliveryBoyOrders();
       var response = deliveryOrderListModelFromJson(result);
+      print("hello");
       if (response.status.toString() == 'SUCCESS') {
         setState(() {
           orderList = response.list;
           orderListAll = orderList;
           isLoading = false;
           print(orderListAll);
-        //    orderList = orderListAll.where((order) {
-        //   return order.orderStatus != null &&
-        //       order.orderStatus  == "Order Placed";
-        // }).toList();
+          //    orderList = orderListAll.where((order) {
+          //   return order.orderStatus != null &&
+          //       order.orderStatus  == "Order Placed";
+          // }).toList();
         });
       } else {
         setState(() {
@@ -271,19 +294,25 @@ class _HomePageState extends State<HomePage> {
                                     items: order.items.length.toString(),
                                     status: order.orderStatus.toString(),
                                     customerAddress: order.customerAddress,
+                                    date: order.createdDate.toString(),
                                     storeAddress: order.storeAddress,
                                     totalPrice: order.totalPrice.toString(),
                                     orderitems: order.items,
-                                    customerDetails: order.customerDetails
-                                    ),
+                                    code: order.code.toString(),
+                                    createddate: order.createdDate.toString(),
+                                    customerDetails: order.customerDetails),
                                 SizedBox(height: 12.0),
                               ],
                             );
                           },
                         ),
                       )
-                      else
-                   Center(child: SubHeadingWidget(title: "No Recent Orders",color: AppColors.black,))
+                    else
+                      Center(
+                          child: SubHeadingWidget(
+                        title: "No Recent Orders",
+                        color: AppColors.black,
+                      ))
                   ],
                 ),
               ),
@@ -362,10 +391,13 @@ class _HomePageState extends State<HomePage> {
       required String time,
       required String items,
       required String status,
-       required  List<OrderItems> orderitems,
+      required List<OrderItems> orderitems,
       required CustomerAddress customerAddress,
-       required CustomerDetails customerDetails,
+      required CustomerDetails customerDetails,
       required StoreAddress storeAddress,
+      required String date,
+      required String createddate,
+      required String code,
       String? totalPrice}) {
     return GestureDetector(
         onTap: () {
@@ -380,6 +412,8 @@ class _HomePageState extends State<HomePage> {
                 totalPrice: totalPrice.toString(),
                 orderitems: orderitems,
                 customerDetails: customerDetails,
+                date: date,
+                code: code,
               ),
             ),
           );
@@ -400,7 +434,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         HeadingWidget(
-                          title: "Order ID ",
+                          title: "Order ID : ",
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                           fontSize: 16.0,
@@ -413,11 +447,43 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        HeadingWidget(
+                          title: "Date       : ",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 16.0,
+                        ),
+                        HeadingWidget(
+                          title: dateFormat(createddate.toString()),
+                          // fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                          fontSize: 14.0,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        HeadingWidget(
+                          title: "Time       : ",
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 16.0,
+                        ),
+                        HeadingWidget(
+                          title: dateFormattime(createddate.toString()),
+                          // fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                          fontSize: 14.0,
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 4.0),
                     Row(
                       children: [
                         Text(
-                          "$time | $items items",
+                          "$time Waiting time | $items items",
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 14.0,

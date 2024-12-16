@@ -12,7 +12,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'login_model.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -27,18 +26,15 @@ class _LoginPageState extends State<LoginPage> {
   AuthValidation authValidation = AuthValidation();
   final NamFoodApiService apiService = NamFoodApiService();
 
-
-
-
-    Future login() async {
+  Future login() async {
     try {
-       showInSnackBar(context, 'Processing...');
+      showInSnackBar(context, 'Processing...');
 
       if (usernameCtrl.text != "" && passwordCtrl.text != "") {
         Map<String, dynamic> postData = {
-         "username":usernameCtrl.text,
-         "password":passwordCtrl.text,
-         "mobile_push_id":""
+          "username": usernameCtrl.text,
+          "password": passwordCtrl.text,
+          "mobile_push_id": ""
         };
         var result = await apiService.deliveryLogin(postData);
         LoginModel response = loginModelFromJson(result);
@@ -46,40 +42,40 @@ class _LoginPageState extends State<LoginPage> {
         closeSnackBar(context: context);
 
         if (response.status.toString() == 'SUCCESS') {
-       
           final prefs = await SharedPreferences.getInstance();
 
           //prefs.setString('fullname', response.fullname ?? '');
 
-            if(response.authToken != null){
-              Navigator.pushNamed(context, '/');
-              prefs.setString('auth_token', response.authToken ?? '');
-              prefs.setBool('isLoggedin', true);
-              prefs.setInt('role', response.role);
+          if (response.authToken != null) {
+            Navigator.pushNamed(context, '/');
+            prefs.setString('auth_token', response.authToken ?? '');
+            prefs.setBool('isLoggedin', true);
+            prefs.setInt('role', response.role);
 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainContainer(),
+              ),
+            );
+          }
 
-               Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainContainer(
-                            ),
-                          ),
-                        );
-            }
-
-         setState(() { });
+          setState(() {});
         } else {
           showInSnackBar(context, response.message.toString());
+          print("hi");
         }
       } else {
         showInSnackBar(context, "Please fill required fields");
       }
     } catch (error) {
-      showInSnackBar(context, error.toString());
+      print("hi1");
+      showInSnackBar(context, "User Details Is Not Correct");
+      //  showInSnackBar(context, error.toString());
     }
   }
 
-   var obscureText = true;
+  var obscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                     validator:
                         authValidation.errValidateMobileNo(usernameCtrl.text),
                     width: MediaQuery.of(context).size.width / 1.1,
-                    type: const TextInputType.numberWithOptions(),
+                    //type: const TextInputType.numberWithOptions(),
                     prefixIcon: Image.asset(AppAssets.UserRounded),
                   ),
 
@@ -139,32 +135,28 @@ class _LoginPageState extends State<LoginPage> {
                   //         AppAssets.passwordEye) // Set +91 as prefixText
                   //     ),
 
-
-                       CustomeTextField(
-                        obscureText: obscureText,
-                        labelText: 'Password',
-                        control: passwordCtrl,
-                        validator: authValidation
-                            .errValidatePasswordForLogin(passwordCtrl.text),
-                        prefixIcon: Image.asset(AppAssets.passwordImg),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              obscureText = !obscureText;
-                            });
-                          },
-                          icon: obscureText
-                              ? Icon(
-                                  MdiIcons.eye,
-                                  color: AppColors.red,
-                                )
-                              : Icon(
-                                  MdiIcons.eyeOff,
-                                  color: AppColors.red
-                                ),
-                        ),
-                        width: MediaQuery.of(context).size.width / 1.1,
-                      ),
+                  CustomeTextField(
+                    obscureText: obscureText,
+                    labelText: 'Password',
+                    control: passwordCtrl,
+                    validator: authValidation
+                        .errValidatePasswordForLogin(passwordCtrl.text),
+                    prefixIcon: Image.asset(AppAssets.passwordImg),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                      icon: obscureText
+                          ? Icon(
+                              MdiIcons.eye,
+                              color: AppColors.red,
+                            )
+                          : Icon(MdiIcons.eyeOff, color: AppColors.red),
+                    ),
+                    width: MediaQuery.of(context).size.width / 1.1,
+                  ),
 
                   const SizedBox(height: 10.0),
                   SizedBox(
@@ -175,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                         //   context,
                         //   MaterialPageRoute(
                         //     builder: (context) => MainContainer(
-                              
+
                         //     ),
                         //   ),
                         // );

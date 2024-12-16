@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namdelivery/constants/app_assets.dart';
 import 'package:namdelivery/constants/app_colors.dart';
 import 'package:flutter_dash/flutter_dash.dart';
+import 'package:namdelivery/pages/maincontainer.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
 
 import '../../services/comFuncService.dart';
@@ -14,17 +15,18 @@ import 'orderpickup_model.dart';
 class OrderDetailsConfirm extends StatefulWidget {
   final String orderId;
   final String totalPrice;
+  final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   List<OrderItems> orderitems;
-  OrderDetailsConfirm({
-    super.key,
-    required this.customerAddress,
-    required this.customerDetails,
-    required this.orderitems,
-    required this.orderId,
-     required this.totalPrice
-  });
+  OrderDetailsConfirm(
+      {super.key,
+      required this.customerAddress,
+      required this.code,
+      required this.customerDetails,
+      required this.orderitems,
+      required this.orderId,
+      required this.totalPrice});
 
   @override
   _OrderDetailsConfirmState createState() => _OrderDetailsConfirmState();
@@ -55,7 +57,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => MainContainer(),
         ),
       );
     } else {
@@ -199,13 +201,16 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => OrderDetailsConfirm(),
-                        //   ),
-                        // );
-                        updateorderpickupstatus();
+                        print(widget.code);
+                        print(
+                            "type code${deliverycodeControl.text.toString()}");
+                        if (widget.code ==
+                            deliverycodeControl.text.toString()) {
+                          updateorderpickupstatus();
+                        } else {
+                          showInSnackBar(
+                              context, "Delivery Code is Not Correct");
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.red,

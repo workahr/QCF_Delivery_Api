@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:namdelivery/constants/app_assets.dart';
 import 'package:namdelivery/constants/app_colors.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -13,6 +14,8 @@ class OrderConfirmPage extends StatefulWidget {
   final String orderId;
   final String time;
   final String totalPrice;
+  final String date;
+  final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   StoreAddress storeAddress;
@@ -21,10 +24,12 @@ class OrderConfirmPage extends StatefulWidget {
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
+      required this.code,
       required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
+      required this.date,
       required this.totalPrice});
 
   @override
@@ -176,7 +181,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  "Order ID ",
+                                                  "Order ID : ",
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -221,24 +226,66 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       ),
                                     ]),
                                 SizedBox(height: 4),
+                                Row(children: [
+                                  Text(
+                                    "Date        : ",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat('dd-MMM-yyyy').format(
+                                        DateTime.parse(widget.date.toString())),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.red,
+                                    ),
+                                  ),
+                                ]),
+                                SizedBox(height: 4),
                                 Row(
-                                  children: [
-                                    Text(
-                                      "Preparation time : ",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Preparation time : ",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${widget.time.toString()}mins",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Text(
-                                      "${widget.time.toString()}mins",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     color: AppColors.red,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(18),
+                                      //   ),
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       horizontal: 18, vertical: 8),
+                                      //   child: Text(
+                                      //     widget.totalPrice.toString(),
+                                      //     style: TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontSize: 16,
+                                      //       fontWeight: FontWeight.bold,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ])
                               ],
                             ),
                           ])),
@@ -393,7 +440,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                     widget.customerDetails.fullname.toString(),
+                                    widget.customerDetails.fullname.toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -407,7 +454,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                  "Contact : ${widget.customerDetails.mobile.toString()}",
+                                    "Contact : ${widget.customerDetails.mobile.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),
@@ -440,6 +487,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                         orderitems: widget.orderitems,
                         customerDetails: widget.customerDetails,
                         totalPrice: widget.totalPrice,
+                        code: widget.code,
                       ),
                     ),
                   );

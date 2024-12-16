@@ -16,6 +16,7 @@ import 'orderpickup_model.dart';
 class OrderDetails extends StatefulWidget {
   final String orderId;
   final String totalPrice;
+  final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   StoreAddress storeAddress;
@@ -23,12 +24,12 @@ class OrderDetails extends StatefulWidget {
   OrderDetails(
       {super.key,
       required this.customerAddress,
+      required this.code,
       required this.customerDetails,
       required this.storeAddress,
       required this.orderitems,
       required this.orderId,
-      required this.totalPrice
-      });
+      required this.totalPrice});
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
 }
@@ -86,8 +87,6 @@ class _OrderDetailsState extends State<OrderDetails> {
     // Call the method to fetch pickup dish list when the screen is initialized
   }
 
- 
-
   void _showpickupconfirmDialog() {
     // Only show the dialog if there are pickup details available
     if (widget.orderitems.isEmpty) {
@@ -120,6 +119,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               customerDetails: widget.customerDetails,
               orderitems: widget.orderitems,
               totalPrice: widget.totalPrice,
+              code: widget.code,
             ),
           ),
         );
@@ -464,12 +464,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                             //SizedBox(height: 8),
                             Text(
-                                     widget.customerDetails.fullname.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                              widget.customerDetails.fullname.toString(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             SizedBox(height: 4),
                             Text(
                               "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",

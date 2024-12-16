@@ -4,82 +4,89 @@
 
 import 'dart:convert';
 
-DeliveryOrderListModel deliveryOrderListModelFromJson(String str) => DeliveryOrderListModel.fromJson(json.decode(str));
+import 'package:flutter/material.dart';
 
-String deliveryOrderListModelToJson(DeliveryOrderListModel data) => json.encode(data.toJson());
+DeliveryOrderListModel deliveryOrderListModelFromJson(String str) =>
+    DeliveryOrderListModel.fromJson(json.decode(str));
+
+String deliveryOrderListModelToJson(DeliveryOrderListModel data) =>
+    json.encode(data.toJson());
 
 class DeliveryOrderListModel {
-    String status;
-    List<DeliveryOrderList> list;
-    String code;
-    String message;
+  String status;
+  List<DeliveryOrderList> list;
+  String code;
+  String message;
 
-    DeliveryOrderListModel({
-        required this.status,
-        required this.list,
-        required this.code,
-        required this.message,
-    });
+  DeliveryOrderListModel({
+    required this.status,
+    required this.list,
+    required this.code,
+    required this.message,
+  });
 
-    factory DeliveryOrderListModel.fromJson(Map<String, dynamic> json) => DeliveryOrderListModel(
+  factory DeliveryOrderListModel.fromJson(Map<String, dynamic> json) =>
+      DeliveryOrderListModel(
         status: json["status"],
-        list: List<DeliveryOrderList>.from(json["list"].map((x) => DeliveryOrderList.fromJson(x))),
+        list: List<DeliveryOrderList>.from(
+            json["list"].map((x) => DeliveryOrderList.fromJson(x))),
         code: json["code"],
         message: json["message"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "list": List<dynamic>.from(list.map((x) => x.toJson())),
         "code": code,
         "message": message,
-    };
+      };
 }
 
 class DeliveryOrderList {
-    String invoiceNumber;
-    int code;
-    int totalProduct;
-    String? totalPrice;
-    String? deliveryCharges;
-    String? orderStatus;
-    String? paymentMethod;
-    int prepareMin;
-    DateTime createdDate;
-    int userId;
-    String deliveryPartnerId;
-    String? customerName;
-    String? customerMobile;
-    String? deliveryBoyName;
-    String? deliveryBoyMobile;
-    List<OrderItems> items;
-    CustomerAddress customerAddress;
-    StoreAddress storeAddress;
-    CustomerDetails customerDetails;
+  String? invoiceNumber;
+  int? code;
+  int? totalProduct;
+  String? totalPrice;
+  String? deliveryCharges;
+  String? orderStatus;
+  String? paymentMethod;
+  int? prepareMin;
+  DateTime createdDate;
+  int? userId;
+  String? deliveryPartnerId;
+  String? customerName;
+  String? customerMobile;
+  String? deliveryBoyName;
+  String? deliveryBoyMobile;
+  List<OrderItems> items;
+  CustomerAddress customerAddress;
+  StoreAddress storeAddress;
+  CustomerDetails customerDetails;
 
-    DeliveryOrderList({
-        required this.invoiceNumber,
-        required this.code,
-        required this.totalProduct,
-         this.totalPrice,
-         this.deliveryCharges,
-         this.orderStatus,
-         this.paymentMethod,
-        required this.prepareMin,
-        required this.createdDate,
-        required this.userId,
-        required this.deliveryPartnerId,
-        required this.customerName,
-        required this.customerMobile,
-        required this.deliveryBoyName,
-        required this.deliveryBoyMobile,
-        required this.items,
-        required this.customerAddress,
-        required this.storeAddress,
-        required this.customerDetails,
-    });
+  DeliveryOrderList({
+    this.invoiceNumber,
+    this.code,
+    this.totalProduct,
+    this.totalPrice,
+    this.deliveryCharges,
+    this.orderStatus,
+    this.paymentMethod,
+    this.prepareMin,
+    required this.createdDate,
+    this.userId,
+    this.deliveryPartnerId,
+    this.customerName,
+    this.customerMobile,
+    this.deliveryBoyName,
+    this.deliveryBoyMobile,
+    required this.items,
+    required this.customerAddress,
+    required this.storeAddress,
+    required this.customerDetails,
+  });
 
-    factory DeliveryOrderList.fromJson(Map<String, dynamic> json) => DeliveryOrderList(
+  factory DeliveryOrderList.fromJson(Map<String, dynamic> json) =>
+      DeliveryOrderList(
         invoiceNumber: json["invoice_number"],
         code: json["code"],
         totalProduct: json["total_product"],
@@ -95,13 +102,15 @@ class DeliveryOrderList {
         customerMobile: json["customer_mobile"],
         deliveryBoyName: json["delivery_boy_name"],
         deliveryBoyMobile: json["delivery_boy_mobile"],
-        items: List<OrderItems>.from(json["items"].map((x) => OrderItems.fromJson(x))),
+        items: List<OrderItems>.from(
+            json["items"].map((x) => OrderItems.fromJson(x))),
         customerAddress: CustomerAddress.fromJson(json["customer_address"]),
         storeAddress: StoreAddress.fromJson(json["store_address"]),
-        customerDetails: CustomerDetails.fromJson(json["customer_details"]), // Parsing new field
-    );
+        customerDetails: CustomerDetails.fromJson(
+            json["customer_details"]), // Parsing new field
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "invoice_number": invoiceNumber,
         "code": code,
         "total_product": totalProduct,
@@ -121,37 +130,38 @@ class DeliveryOrderList {
         "customer_address": customerAddress.toJson(),
         "store_address": storeAddress.toJson(),
         "customer_details": customerDetails.toJson(),
-    };
+      };
 }
 
 class CustomerAddress {
-    int id;
-    int orderId;
-    String address;
-    String landmark;
-    String city;
-    String state;
-    String country;
-    String pincode;
-    String addressLine2;
-    int status;
-    DateTime createdDate;
+  int id;
+  int? orderId;
+  String? address;
+  String? landmark;
+  String? city;
+  String? state;
+  String? country;
+  String? pincode;
+  String? addressLine2;
+  int? status;
+  DateTime createdDate;
 
-    CustomerAddress({
-        required this.id,
-        required this.orderId,
-        required this.address,
-        required this.landmark,
-        required this.city,
-        required this.state,
-        required this.country,
-        required this.pincode,
-        required this.addressLine2,
-        required this.status,
-        required this.createdDate,
-    });
+  CustomerAddress({
+    required this.id,
+    this.orderId,
+    this.address,
+    this.landmark,
+    this.city,
+    this.state,
+    this.country,
+    this.pincode,
+    this.addressLine2,
+    this.status,
+    required this.createdDate,
+  });
 
-    factory CustomerAddress.fromJson(Map<String, dynamic> json) => CustomerAddress(
+  factory CustomerAddress.fromJson(Map<String, dynamic> json) =>
+      CustomerAddress(
         id: json["id"],
         orderId: json["order_id"],
         address: json["address"],
@@ -163,9 +173,9 @@ class CustomerAddress {
         addressLine2: json["address_line_2"],
         status: json["status"],
         createdDate: DateTime.parse(json["created_date"]),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "order_id": orderId,
         "address": address,
@@ -177,49 +187,49 @@ class CustomerAddress {
         "address_line_2": addressLine2,
         "status": status,
         "created_date": createdDate.toIso8601String(),
-    };
+      };
 }
 
 class OrderItems {
-    int orderItemId;
-    int storeId;
-    int orderId;
-    int productId;
-    String productName;
-    int userId;
-    String price;
-    int quantity;
-    String totalPrice;
-    String storePrice;
-    String storeTotalPrice;
-    dynamic imageUrl;
-    int status;
-    int createdBy;
-    DateTime createdDate;
-    dynamic updatedBy;
-    dynamic updatedDate;
+  int? orderItemId;
+  int? storeId;
+  int? orderId;
+  int? productId;
+  String? productName;
+  int? userId;
+  String? price;
+  int? quantity;
+  String? totalPrice;
+  String? storePrice;
+  String? storeTotalPrice;
+  String? imageUrl;
+  int? status;
+  int? createdBy;
+  DateTime? createdDate;
+  String? updatedBy;
+  String? updatedDate;
 
-    OrderItems({
-        required this.orderItemId,
-        required this.storeId,
-        required this.orderId,
-        required this.productId,
-        required this.productName,
-        required this.userId,
-        required this.price,
-        required this.quantity,
-        required this.totalPrice,
-        required this.storePrice,
-        required this.storeTotalPrice,
-        required this.imageUrl,
-        required this.status,
-        required this.createdBy,
-        required this.createdDate,
-        required this.updatedBy,
-        required this.updatedDate,
-    });
+  OrderItems({
+    this.orderItemId,
+    this.storeId,
+    this.orderId,
+    this.productId,
+    this.productName,
+    this.userId,
+    this.price,
+    this.quantity,
+    this.totalPrice,
+    this.storePrice,
+    this.storeTotalPrice,
+    this.imageUrl,
+    this.status,
+    this.createdBy,
+    this.createdDate,
+    this.updatedBy,
+    this.updatedDate,
+  });
 
-    factory OrderItems.fromJson(Map<String, dynamic> json) => OrderItems(
+  factory OrderItems.fromJson(Map<String, dynamic> json) => OrderItems(
         orderItemId: json["order_item_id"],
         storeId: json["store_id"],
         orderId: json["order_id"],
@@ -237,9 +247,9 @@ class OrderItems {
         createdDate: DateTime.parse(json["created_date"]),
         updatedBy: json["updated_by"],
         updatedDate: json["updated_date"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "order_item_id": orderItemId,
         "store_id": storeId,
         "order_id": orderId,
@@ -254,66 +264,66 @@ class OrderItems {
         "image_url": imageUrl,
         "status": status,
         "created_by": createdBy,
-        "created_date": createdDate.toIso8601String(),
+        "created_date": createdDate!.toIso8601String(),
         "updated_by": updatedBy,
         "updated_date": updatedDate,
-    };
+      };
 }
 
 class StoreAddress {
-    int storeId;
-    int userId;
-    String name;
-    String mobile;
-    String email;
-    String address;
-    String city;
-    String state;
-    dynamic country;
-    dynamic logo;
-    dynamic gstNo;
-    dynamic panNo;
-    dynamic terms;
-    String zipcode;
-    dynamic frontImg;
-    String onlineVisibility;
-    dynamic tags;
-    int status;
-    dynamic createdBy;
-    dynamic createdDate;
-    dynamic updatedBy;
-    dynamic updatedDate;
-    dynamic slug;
-    int storeStatus;
+  int storeId;
+  int? userId;
+  String? name;
+  String? mobile;
+  String? email;
+  String? address;
+  String? city;
+  String? state;
+  String? country;
+  String? logo;
+  String? gstNo;
+  String? panNo;
+  String? terms;
+  String? zipcode;
+  String? frontImg;
+  String? onlineVisibility;
+  String? tags;
+  int? status;
+  int? createdBy;
+  String? createdDate;
+  dynamic updatedBy;
+  dynamic updatedDate;
+  String? slug;
+  int storeStatus;
 
-    StoreAddress({
-        required this.storeId,
-        required this.userId,
-        required this.name,
-        required this.mobile,
-        required this.email,
-        required this.address,
-        required this.city,
-        required this.state,
-        required this.country,
-        required this.logo,
-        required this.gstNo,
-        required this.panNo,
-        required this.terms,
-        required this.zipcode,
-        required this.frontImg,
-        required this.onlineVisibility,
-        required this.tags,
-        required this.status,
-        required this.createdBy,
-        required this.createdDate,
-        required this.updatedBy,
-        required this.updatedDate,
-        required this.slug,
-        required this.storeStatus,
-    });
+  StoreAddress({
+    required this.storeId,
+    this.userId,
+    this.name,
+    this.mobile,
+    this.email,
+    this.address,
+    this.city,
+    this.state,
+    this.country,
+    this.logo,
+    this.gstNo,
+    this.panNo,
+    this.terms,
+    this.zipcode,
+    this.frontImg,
+    this.onlineVisibility,
+    this.tags,
+    this.status,
+    this.createdBy,
+    this.createdDate,
+    required this.updatedBy,
+    required this.updatedDate,
+    this.slug,
+    required this.storeStatus,
+  });
 
-    factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
+  factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
         storeId: json["store_id"],
         userId: json["user_id"],
         name: json["name"],
@@ -338,9 +348,9 @@ class StoreAddress {
         updatedDate: json["updated_date"],
         slug: json["slug"],
         storeStatus: json["store_status"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "store_id": storeId,
         "user_id": userId,
         "name": name,
@@ -365,23 +375,23 @@ class StoreAddress {
         "updated_date": updatedDate,
         "slug": slug,
         "store_status": storeStatus,
-    };
+      };
 }
 
 class CustomerDetails {
   int id;
-  String username;
-  String password;
-  String fullname;
-  String email;
-  String mobile;
-  int role;
-  String regOtp;
-  int status;
-  int active;
-  int createdBy;
+  String? username;
+  String? password;
+  String? fullname;
+  String? email;
+  String? mobile;
+  int? role;
+  String? regOtp;
+  int? status;
+  int? active;
+  int? createdBy;
   DateTime createdDate;
-  int updatedBy;
+  int? updatedBy;
   DateTime updatedDate;
   String? mobilePushId;
   String? imageUrl;
@@ -398,18 +408,18 @@ class CustomerDetails {
 
   CustomerDetails({
     required this.id,
-    required this.username,
-    required this.password,
-    required this.fullname,
-    required this.email,
-    required this.mobile,
-    required this.role,
-    required this.regOtp,
-    required this.status,
-    required this.active,
-    required this.createdBy,
+    this.username,
+    this.password,
+    this.fullname,
+    this.email,
+    this.mobile,
+    this.role,
+    this.regOtp,
+    this.status,
+    this.active,
+    this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
+    this.updatedBy,
     required this.updatedDate,
     this.mobilePushId,
     this.imageUrl,
@@ -425,7 +435,8 @@ class CustomerDetails {
     this.pincode,
   });
 
-  factory CustomerDetails.fromJson(Map<String, dynamic> json) => CustomerDetails(
+  factory CustomerDetails.fromJson(Map<String, dynamic> json) =>
+      CustomerDetails(
         id: json["id"],
         username: json["username"],
         password: json["password"],
@@ -483,4 +494,3 @@ class CustomerDetails {
         "pincode": pincode,
       };
 }
-

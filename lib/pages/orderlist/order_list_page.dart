@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
 import 'package:namdelivery/widgets/sub_heading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
@@ -17,18 +18,17 @@ class OrderListPage extends StatefulWidget {
 }
 
 class _OrderListPageState extends State<OrderListPage> {
+  final NamFoodApiService apiService = NamFoodApiService();
 
-   final NamFoodApiService apiService = NamFoodApiService();
-
-@override
-void initState() {
-  super.initState();
-  getAllDeliveryBoyOrders();
-}
+  @override
+  void initState() {
+    super.initState();
+    getAllDeliveryBoyOrders();
+  }
 
 // List<OrderList> orderList = [];
 // List<OrderList> orderListAll = [];
-// List<OrderList> ordersForToday = []; 
+// List<OrderList> ordersForToday = [];
 // List<OrderList> ordersNotForToday = [];
 
 // bool isLoading = false;
@@ -47,7 +47,6 @@ void initState() {
 //         orderList = response.list;
 //         orderListAll = orderList;
 
-       
 //         String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
 //         // Filter orders with the current date.
@@ -88,13 +87,12 @@ void initState() {
 //   }
 // }
 
-
-bool isLoading = false;
+  bool isLoading = false;
   List<DeliveryOrderList> orderList = [];
   List<DeliveryOrderList> orderListAll = [];
 
-  List<DeliveryOrderList> ordersForToday = []; 
-List<DeliveryOrderList> ordersNotForToday = [];
+  List<DeliveryOrderList> ordersForToday = [];
+  List<DeliveryOrderList> ordersNotForToday = [];
 
   // double totalDiscountPrice = 0.0;
 
@@ -116,20 +114,21 @@ List<DeliveryOrderList> ordersNotForToday = [];
           orderListAll = orderList;
           isLoading = false;
           print(orderListAll);
-                  String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+          String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-        // Filter orders with the current date.
-        ordersForToday = orderListAll.where((order) {
-          return order.createdDate != null &&
-              DateFormat('yyyy-MM-dd').format(order.createdDate) == today && order.orderStatus != "New";
-        }).toList();
+          // Filter orders with the current date.
+          ordersForToday = orderListAll.where((order) {
+            return order.createdDate != null &&
+                DateFormat('yyyy-MM-dd').format(order.createdDate) == today &&
+                order.orderStatus != "New";
+          }).toList();
 
-        // Filter orders with other dates or null dates.
-        ordersNotForToday = orderListAll.where((order) {
-          return order.createdDate == null ||
-              DateFormat('yyyy-MM-dd').format(order.createdDate) != today && order.orderStatus != "New";
-        }).toList();
-
+          // Filter orders with other dates or null dates.
+          ordersNotForToday = orderListAll.where((order) {
+            return order.createdDate == null ||
+                DateFormat('yyyy-MM-dd').format(order.createdDate) != today &&
+                    order.orderStatus != "New";
+          }).toList();
         });
       } else {
         setState(() {
@@ -137,7 +136,7 @@ List<DeliveryOrderList> ordersNotForToday = [];
           orderListAll = [];
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        // showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
@@ -145,104 +144,142 @@ List<DeliveryOrderList> ordersNotForToday = [];
         orderListAll = [];
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      // showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
   }
 
 
-  @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: HeadingWidget(
-        title: "Total Orders",
-        fontSize: 18.0,
-        fontWeight: FontWeight.bold,
-      ),
-      automaticallyImplyLeading: false,
-    ),
-    body:  orderList.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          :
-    SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
+  
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeadingWidget(
-              title: "Today Orders",
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+            SizedBox(
+              height: 5,
             ),
-            SizedBox(height: 6.0,),
-            if(ordersForToday.isNotEmpty)
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: ordersForToday.length,
-              itemBuilder: (context, index) {
-                final order = ordersForToday[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: _buildOrderCard(
-                    orderId: order.invoiceNumber.toString(),
-                    time: order.prepareMin.toString(),
-                    items: order.items.length.toString(),
-                    status: order.orderStatus.toString(),
-                    //reachingTime: order.reachingTime.toString(),
-                    color: AppColors.green,
-                  ),
-                );
-              },
-            )
-            else
-            //SizedBox(height: 10.0,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SubHeadingWidget(title: "No Today Completed Orders", color: AppColors.black,),
-              ],
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
             ),
-
-            SizedBox(height: 10.0,),
-            
-            if (ordersNotForToday.isNotEmpty) ...[
-              HeadingWidget(
-                title: "Yesterday Orders",
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-               SizedBox(height: 6.0,),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: ordersNotForToday.length,
-                itemBuilder: (context, index) {
-                  final order = ordersNotForToday[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: _buildOrderCard(
-                      orderId: order.invoiceNumber.toString(),
-                      time: order.prepareMin.toString(),
-                      items: order.items.length.toString(),
-                      status: order.orderStatus.toString(),
-                      //reachingTime: order.reachingTime.toString(),
-                      color: AppColors.red,
-                    ),
-                  );
-                },
-              ),
-            ],
           ],
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: HeadingWidget(
+          title: "Total Orders",
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+        automaticallyImplyLeading: false,
+      ),
+      body:isLoading
+          ? ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return _buildShimmerPlaceholder();
+              },
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HeadingWidget(
+                      title: "Today Orders",
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(
+                      height: 6.0,
+                    ),
+                    if (ordersForToday.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ordersForToday.length,
+                        itemBuilder: (context, index) {
+                          final order = ordersForToday[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: _buildOrderCard(
+                              orderId: order.invoiceNumber.toString(),
+                              time: order.prepareMin.toString(),
+                              items: order.items.length.toString(),
+                              status: order.orderStatus.toString(),
+                              //reachingTime: order.reachingTime.toString(),
+                              color: AppColors.green,
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      //SizedBox(height: 10.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SubHeadingWidget(
+                            title: "No Today Completed Orders",
+                            color: AppColors.black,
+                          ),
+                        ],
+                      ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    if (ordersNotForToday.isNotEmpty) ...[
+                      HeadingWidget(
+                        title: "Yesterday Orders",
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: 6.0,
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ordersNotForToday.length,
+                        itemBuilder: (context, index) {
+                          final order = ordersNotForToday[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: _buildOrderCard(
+                              orderId: order.invoiceNumber.toString(),
+                              time: order.prepareMin.toString(),
+                              items: order.items.length.toString(),
+                              status: order.orderStatus.toString(),
+                              //reachingTime: order.reachingTime.toString(),
+                              color: AppColors.red,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
 
   // Widget for Recent Orders Card
   Widget _buildOrderCard({
@@ -250,7 +287,7 @@ Widget build(BuildContext context) {
     required String time,
     required String items,
     required String status,
-     String? reachingTime="",
+    String? reachingTime = "",
     required Color color,
   }) {
     return Container(
@@ -267,25 +304,20 @@ Widget build(BuildContext context) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               Row(
+                Row(
                   children: [
-
-                     HeadingWidget(
-                  title: "Order ID ",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 16.0,
-          
-                ),
-
-                  HeadingWidget(
-                  title: orderId.toString(),
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.red,
-                    fontSize: 17.0,
-          
-                ),
-
+                    HeadingWidget(
+                      title: "Order ID ",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 16.0,
+                    ),
+                    HeadingWidget(
+                      title: orderId.toString(),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.red,
+                      fontSize: 17.0,
+                    ),
                   ],
                 ),
                 SizedBox(height: 4.0),

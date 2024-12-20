@@ -15,22 +15,21 @@ class Floatingbalancedetailspage extends StatefulWidget {
   final String orderId;
   final String time;
   final String totalPrice;
-    final String CreatedDate;
+  final String CreatedDate;
   CustomerAddress customerAddress;
-  StoreAddress storeAddress;
+  // StoreAddress storeAddress;
   CustomerDetails customerDetails;
   List<OrderItems> orderitems;
   Floatingbalancedetailspage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
-      required this.storeAddress,
+      // required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
       required this.CreatedDate,
       required this.totalPrice});
-
 
   @override
   State<Floatingbalancedetailspage> createState() =>
@@ -73,7 +72,7 @@ class _FloatingbalancedetailspageState
           floatingorderAll = [];
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        // showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
@@ -81,7 +80,7 @@ class _FloatingbalancedetailspageState
         floatingorderAll = [];
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      // showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
@@ -109,7 +108,7 @@ class _FloatingbalancedetailspageState
                   ),
                   const SizedBox(width: 6),
                   HeadingWidget(
-                     title: widget.orderId.toString(),
+                    title: widget.orderId.toString(),
                     color: AppColors.red,
                   ),
                 ],
@@ -132,11 +131,11 @@ class _FloatingbalancedetailspageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 6),
-                       SubHeadingWidget(
-                                  title: '${widget.time.toString()} mins',
-                                  color: AppColors.black,
-                                  fontSize: 16.0,
-                                ),
+                        SubHeadingWidget(
+                          title: '${widget.time.toString()} mins',
+                          color: AppColors.black,
+                          fontSize: 16.0,
+                        ),
                         const SizedBox(height: 6),
                         Row(
                           children: [
@@ -205,86 +204,87 @@ class _FloatingbalancedetailspageState
                       ],
                     ),
                     const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: AppColors.red,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Text(
-                              "Pickup",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                    // Expanded(
+                    //   child:
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.red,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                             widget.storeAddress.name.toString(),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: Text(
+                            "Pickup",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                            "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black),
+                        ),
+                        const SizedBox(height: 8),
+                        // Text(
+                        //   widget.storeAddress.name.toString(),
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 4),
+                        // Text(
+                        //   //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                        //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                        //   style: const TextStyle(
+                        //       fontSize: 14, color: Colors.black),
+                        // ),
+                        // const SizedBox(height: 4),
+                        // Text(
+                        //   "Contact : ${widget.storeAddress.mobile}",
+                        //   style: const TextStyle(
+                        //       fontSize: 14, color: Colors.black),
+                        // ),
+                        const SizedBox(height: 16),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.red,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                          "Contact : ${widget.storeAddress.mobile}",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: AppColors.red,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            child: Text(
-                              "Delivery",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                           widget.customerDetails.fullname.toString(),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: Text(
+                            "Delivery",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                           "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.customerDetails.fullname.toString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "Contact : ${widget.customerDetails.mobile.toString()}",
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black),
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Contact : ${widget.customerDetails.mobile.toString()}",
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                        ),
+                      ],
+                      // ),
                     ),
                   ],
                 ),
@@ -308,33 +308,39 @@ class _FloatingbalancedetailspageState
                       color: AppColors.red,
                     ),
                     const SizedBox(height: 8),
-                    if(widget.orderitems.isNotEmpty)
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.orderitems.length,
-                      itemBuilder: (context, index) {
-                        final e = widget.orderitems[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Row(
-                            children: [
-                              HeadingWidget(
-                                title: e.productName.toString(),
-                              ),
-                              const SizedBox(width: 6),
-                              HeadingWidget(
-                                title: 'X',
-                              ),
-                              const SizedBox(width: 6),
-                              HeadingWidget(
-                                title: e.quantity.toString(),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    if (widget.orderitems.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: widget.orderitems.length,
+                        itemBuilder: (context, index) {
+                          final e = widget.orderitems[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: Row(
+                              children: [
+                                // HeadingWidget(
+                                //   title: e.productName.toString(),
+                                // ),
+                                HeadingWidget(
+                                  title: e.quantity.toString(),
+                                ),
+                                const SizedBox(width: 6),
+                                HeadingWidget(
+                                  title: 'X',
+                                ),
+                                const SizedBox(width: 6),
+                                HeadingWidget(
+                                  title: e.productName.toString(),
+                                ),
+                                // HeadingWidget(
+                                //   title: e.quantity.toString(),
+                                // ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),

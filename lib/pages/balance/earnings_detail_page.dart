@@ -11,16 +11,16 @@ class EarningsDetailPage extends StatefulWidget {
   final String orderId;
   final String time;
   final String deliveryCharges;
-    final String CreatedDate;
+  final String CreatedDate;
   CustomerAddress customerAddress;
-  StoreAddress storeAddress;
+  //StoreAddress storeAddress;
   CustomerDetails customerDetails;
   List<OrderItems> orderitems;
   EarningsDetailPage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
-      required this.storeAddress,
+      // required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
@@ -87,7 +87,8 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                 ),
                                 SizedBox(height: 4.0),
                                 SubHeadingWidget(
-                                  title: "Date:${widget.CreatedDate.toString()}",
+                                  title:
+                                      "Date:${widget.CreatedDate.toString()}",
                                   color: AppColors.black,
                                   fontSize: 16.0,
                                 ),
@@ -197,26 +198,26 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                     ),
                                   ),
                                   SizedBox(height: 8),
-                                  Text(
-                                    widget.storeAddress.name.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                   "Contact : ${widget.storeAddress.mobile}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
+                                  // Text(
+                                  //   widget.storeAddress.name.toString(),
+                                  //   style: TextStyle(
+                                  //     fontSize: 16,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 4),
+                                  // Text(
+                                  //   //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                  //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                                  //   style: TextStyle(
+                                  //       fontSize: 14, color: Colors.black),
+                                  // ),
+                                  // SizedBox(height: 4),
+                                  // Text(
+                                  //  "Contact : ${widget.storeAddress.mobile}",
+                                  //   style: TextStyle(
+                                  //       fontSize: 14, color: Colors.black),
+                                  // ),
                                   SizedBox(height: 16),
                                   // Delivery Information
                                   Container(
@@ -249,7 +250,7 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                   "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
+                                    "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.black),
                                   ),

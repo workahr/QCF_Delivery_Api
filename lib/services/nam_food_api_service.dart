@@ -1398,6 +1398,60 @@ class NamFoodApiService {
     }
   }
 
+  // Get Profile Details For Delivery
+
+  Future getprofileDetails() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/getuserdetails');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        print(response.toString());
+
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // Update Profile
+  Future updateprofile(
+      String apiCtrl, Map<String, dynamic> postData, imageFile) async {
+    try {
+      final url = Uri.parse(liveApiPath + apiCtrl);
+
+      var headers = headerData;
+      var request = http.MultipartRequest(
+        'POST',
+        url,
+      );
+      request.headers.addAll(headerData);
+
+      for (var entry in postData.entries) {
+        request.fields[entry.key] = entry.value.toString();
+      }
+      if (imageFile != null) {
+        var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+        request.files.add(image);
+      }
+      request.headers.addAll(headers);
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        final json = await response.stream.bytesToString();
+        return json;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   // driverlist
   // Future getdriverList() async {
   //   try {
@@ -1626,9 +1680,8 @@ class NamFoodApiService {
     }
   }
 
-
-    // get DeliveryBoy Earnings
-   Future getDeliveryBoyEarnings() async {
+  // get DeliveryBoy Earnings
+  Future getDeliveryBoyEarnings() async {
     try {
       final url = Uri.parse('${liveApiPath}v1/getdeliveryboydashboardrecord');
       final response = await client.get(
@@ -1645,9 +1698,8 @@ class NamFoodApiService {
     }
   }
 
-
   // get All DeliveryBoyOrders
-   Future getAllDeliveryBoyOrders() async {
+  Future getAllDeliveryBoyOrders() async {
     try {
       final url = Uri.parse('${liveApiPath}v1/getallorderbydelivery');
       final response = await client.get(
@@ -1663,7 +1715,7 @@ class NamFoodApiService {
       return e;
     }
   }
-   // Delivery  App Api
+  // Delivery  App Api
 
   // Order Pick Up Status update
 

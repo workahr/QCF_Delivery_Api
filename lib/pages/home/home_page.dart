@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_assets.dart';
 import '../../constants/app_colors.dart';
@@ -9,6 +10,7 @@ import '../../services/nam_food_api_service.dart';
 import '../../widgets/sub_heading_widget.dart';
 import '../models/dashboard_order_list_model.dart';
 import '../order/orderconfirm_page.dart';
+import '../profile/profile_list_model.dart';
 import 'dashboard_delivery_model.dart';
 import 'delivery_order_list_model.dart';
 import 'totalearnings.dart';
@@ -29,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getprofileDetails();
     print("1");
     getDeliveryBoyEarnings();
     print("2");
@@ -92,7 +95,7 @@ class _HomePageState extends State<HomePage> {
           orderListAll = [];
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        //  showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
@@ -100,10 +103,48 @@ class _HomePageState extends State<HomePage> {
         orderListAll = [];
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      //  showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
+  }
+
+  ProfileDetails? profiledetailsList;
+  // List<ProfileDetails> profiledetailsListAll = [];
+
+  Future getprofileDetails() async {
+    await apiService.getBearerToken();
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var result = await apiService.getprofileDetails();
+      var response = userDetailsmodelFromJson(result);
+      if (response.status.toString() == 'SUCCESS') {
+        setState(() {
+          print("userdetails $profiledetailsList");
+          profiledetailsList = response.list;
+          // profiledetailsListAll = profiledetailsList;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          profiledetailsList = null;
+          // profiledetailsListAll = [];
+          isLoading = false;
+        });
+        showInSnackBar(context, response.message.toString());
+      }
+    } catch (e) {
+      setState(() {
+        profiledetailsList = null;
+        // profiledetailsListAll = [];
+        isLoading = false;
+      });
+      showInSnackBar(context, 'Error occurred: $e');
+      print('Error occurred: $e');
+    }
   }
 
   DeliveryEarningData? deliveryBoyDetails;
@@ -129,17 +170,114 @@ class _HomePageState extends State<HomePage> {
           deliveryBoyDetails = null;
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        //  showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
         deliveryBoyDetails = null;
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      //  showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
+  }
+
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(13), // Add border radius
+                  child: Container(
+                    width: 210,
+                    height: 120,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  width: 18,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(13), // Add border radius
+                  child: Container(
+                    width: 210,
+                    height: 120,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -162,26 +300,91 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Column(
+                  child:
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     HeadingWidget(
+                      //       title: "Hi John",
+                      //       color: Colors.white,
+                      //       fontSize: 18.0,
+                      //       fontWeight: FontWeight.bold,
+                      //       vMargin: 1.0,
+                      //     ),
+                      //     //SizedBox(height: 4.0),
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         SubHeadingWidget(
+                      //           title: "ID - DB12345",
+                      //           color: Colors.white,
+                      //           fontSize: 16.0,
+                      //           vMargin: 1.0,
+                      //         ),
+                      //         Row(
+                      //           mainAxisAlignment: MainAxisAlignment.end,
+                      //           children: [
+                      //             SubHeadingWidget(
+                      //               title: "Duty Status",
+                      //               color: Colors.white,
+                      //               fontSize: 17.0,
+                      //               vMargin: 1.0,
+                      //             ),
+                      //             SizedBox(width: 8.0),
+                      //             Transform.scale(
+                      //               scale: 0.8,
+                      //               child: Switch(
+                      //                 value: isOnDuty,
+                      //                 onChanged: (value) {
+                      //                   setState(() {
+                      //                     isOnDuty = value;
+                      //                   });
+                      //                 },
+                      //                 activeColor: Colors.white,
+                      //                 activeTrackColor: Colors.green,
+                      //                 inactiveThumbColor: Colors.grey,
+                      //                 inactiveTrackColor: Colors.grey.shade300,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ],
+                      //     )
+                      //   ],
+                      // ),
+                      Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      HeadingWidget(
-                        title: "Hi John",
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        vMargin: 1.0,
-                      ),
+                      // HeadingWidget(
+                      //   title: "Hi John",
+                      //   color: Colors.white,
+                      //   fontSize: 18.0,
+                      //   fontWeight: FontWeight.bold,
+                      //   vMargin: 1.0,
+                      // ),
                       //SizedBox(height: 4.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SubHeadingWidget(
-                            title: "ID - DB12345",
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            vMargin: 1.0,
-                          ),
+                          // SubHeadingWidget(
+                          //   title: "ID - DB12345",
+                          //   color: Colors.white,
+                          //   fontSize: 16.0,
+                          //   vMargin: 1.0,
+                          // ),
+                          if (profiledetailsList != null)
+                            HeadingWidget(
+                              title: ('Hi ${profiledetailsList!.fullname!}' ??
+                                  ''), // "Johan Singh",
+                              color: AppColors.white,
+                            ),
+                          // HeadingWidget(
+                          //   title: "Hi John",
+                          //   color: Colors.white,
+                          //   fontSize: 18.0,
+                          //   fontWeight: FontWeight.bold,
+                          //   vMargin: 1.0,
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -219,8 +422,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: deliveryBoyDetails == null
-          ? Center(child: CircularProgressIndicator())
+      body: isLoading
+          ? ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return _buildShimmerPlaceholder();
+              },
+            )
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -288,19 +496,20 @@ class _HomePageState extends State<HomePage> {
                             final order = orderList[index];
                             return Column(
                               children: [
-                                _buildOrderCard(
-                                    orderId: order.invoiceNumber.toString(),
-                                    time: order.prepareMin.toString(),
-                                    items: order.items.length.toString(),
-                                    status: order.orderStatus.toString(),
-                                    customerAddress: order.customerAddress,
-                                    date: order.createdDate.toString(),
-                                    storeAddress: order.storeAddress,
-                                    totalPrice: order.totalPrice.toString(),
-                                    orderitems: order.items,
-                                    code: order.code.toString(),
-                                    createddate: order.createdDate.toString(),
-                                    customerDetails: order.customerDetails),
+                                if (order.orderStatus != "Order Delivered")
+                                  _buildOrderCard(
+                                      orderId: order.invoiceNumber.toString(),
+                                      time: order.prepareMin.toString(),
+                                      items: order.items.length.toString(),
+                                      status: order.orderStatus.toString(),
+                                      customerAddress: order.customerAddress,
+                                      date: order.createdDate.toString(),
+                                      //storeAddress: order.storeAddress,
+                                      totalPrice: order.totalPrice.toString(),
+                                      orderitems: order.items,
+                                      code: order.code.toString(),
+                                      createddate: order.createdDate.toString(),
+                                      customerDetails: order.customerDetails),
                                 SizedBox(height: 12.0),
                               ],
                             );
@@ -312,7 +521,8 @@ class _HomePageState extends State<HomePage> {
                           child: SubHeadingWidget(
                         title: "No Recent Orders",
                         color: AppColors.black,
-                      ))
+                      )),
+                    SizedBox(height: 82.0),
                   ],
                 ),
               ),
@@ -394,7 +604,7 @@ class _HomePageState extends State<HomePage> {
       required List<OrderItems> orderitems,
       required CustomerAddress customerAddress,
       required CustomerDetails customerDetails,
-      required StoreAddress storeAddress,
+      // required StoreAddress storeAddress,
       required String date,
       required String createddate,
       required String code,
@@ -406,7 +616,7 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(
               builder: (_) => OrderConfirmPage(
                 customerAddress: customerAddress,
-                storeAddress: storeAddress,
+                //storeAddress: storeAddress,
                 orderId: orderId,
                 time: time,
                 totalPrice: totalPrice.toString(),
@@ -483,7 +693,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         Text(
-                          "$time Waiting time | $items items",
+                          "$time mins | $items items",
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 14.0,

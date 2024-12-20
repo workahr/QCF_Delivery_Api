@@ -155,7 +155,7 @@ class AppAssets {
   static const String order_delivery_icon =
       'assets/images/order_delivery_icon.png';
   static const String order_delivery_icon_red =
-      'images/order_delivery_icon_red.png';
+      'assets/images/order_delivery_icon_red.png';
   static const String earningsIcon = 'assets/images/earnings_icon.png';
   static const String dollarIcon = 'assets/images/dollar_icon.png';
   static const String order_preparing_icon =

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
@@ -16,7 +17,6 @@ class TripsListPage extends StatefulWidget {
 }
 
 class _TripsListPageState extends State<TripsListPage> {
-
   final NamFoodApiService apiService = NamFoodApiService();
 
   @override
@@ -30,7 +30,6 @@ class _TripsListPageState extends State<TripsListPage> {
   List<TripList> tripListAll = [];
 
   bool isLoading = false;
-
 
   Future getTripList() async {
     setState(() {
@@ -67,11 +66,8 @@ class _TripsListPageState extends State<TripsListPage> {
     setState(() {});
   }
 
-
-
   List<DeliveryOrderList> orderList = [];
   List<DeliveryOrderList> orderListAll = [];
-
 
   Future getAllDeliveryBoyOrders() async {
     await apiService.getBearerToken();
@@ -88,8 +84,6 @@ class _TripsListPageState extends State<TripsListPage> {
           orderListAll = orderList;
           isLoading = false;
           print(orderListAll);
-
-
         });
       } else {
         setState(() {
@@ -97,7 +91,7 @@ class _TripsListPageState extends State<TripsListPage> {
           orderListAll = [];
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        // showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
@@ -105,66 +99,96 @@ class _TripsListPageState extends State<TripsListPage> {
         orderListAll = [];
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      //  showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: HeadingWidget(
-          title: "Total Trips",
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              HeadingWidget(
-                title: "Current Trips",
-                fontWeight: FontWeight.bold,
-                fontSize: 17.0,
-              ),
-              SizedBox(
-                height: 12.0,
-              ),
 
-                if(orderList.isNotEmpty)
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: orderList.length,
-              itemBuilder: (context, index) {
-                final order = orderList[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: _buildOrderCard(
-                    orderId: order.invoiceNumber.toString(),
-                    time: order.prepareMin.toString(),
-                    items: order.items.length.toString(),
-                    status: order.orderStatus.toString(),
-                    color: order.orderStatus =="Order Placed" ? AppColors.green : AppColors.darkgold,
-                  ),
-                );
-              },
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5,
             ),
-            ]
-          )
-        )
-      )
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: HeadingWidget(
+            title: "Total Trips",
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        body: isLoading
+            ? ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return _buildShimmerPlaceholder();
+                },
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          HeadingWidget(
+                            title: "Current Trips",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          if (orderList.isNotEmpty)
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: orderList.length,
+                              itemBuilder: (context, index) {
+                                final order = orderList[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                  child: _buildOrderCard(
+                                    orderId: order.invoiceNumber.toString(),
+                                    time: order.prepareMin.toString(),
+                                    items: order.items.length.toString(),
+                                    status: order.orderStatus.toString(),
+                                    color: order.orderStatus == "Order Placed"
+                                        ? AppColors.green
+                                        : AppColors.darkgold,
+                                  ),
+                                );
+                              },
+                            ),
+                        ]))));
+  }
 
-   // Widget for Recent Orders Card
+  // Widget for Recent Orders Card
   Widget _buildOrderCard({
     required String orderId,
     required String time,
@@ -186,25 +210,20 @@ class _TripsListPageState extends State<TripsListPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               Row(
+                Row(
                   children: [
-
-                     HeadingWidget(
-                  title: "Order ID ",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 16.0,
-          
-                ),
-
-                  HeadingWidget(
-                  title: orderId.toString(),
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.red,
-                    fontSize: 17.0,
-          
-                ),
-
+                    HeadingWidget(
+                      title: "Order ID ",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 16.0,
+                    ),
+                    HeadingWidget(
+                      title: orderId.toString(),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.red,
+                      fontSize: 17.0,
+                    ),
                   ],
                 ),
                 SizedBox(height: 4.0),
@@ -226,9 +245,9 @@ class _TripsListPageState extends State<TripsListPage> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: HeadingWidget(
-                       title:  status,
-                          color: Colors.white,
-                          fontSize: 12.0,
+                        title: status,
+                        color: Colors.white,
+                        fontSize: 12.0,
                       ),
                     ),
                   ],

@@ -19,14 +19,14 @@ class OrderDetails extends StatefulWidget {
   final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
-  StoreAddress storeAddress;
+  //StoreAddress storeAddress;
   List<OrderItems> orderitems;
   OrderDetails(
       {super.key,
       required this.customerAddress,
       required this.code,
       required this.customerDetails,
-      required this.storeAddress,
+      // required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.totalPrice});
@@ -100,7 +100,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       await apiService.getBearerToken();
 
       Map<String, dynamic> postData = {
-        "order_id": "1",
+        "order_id": widget.orderitems[0].orderId,
         "order_status": "Order Picked"
       };
       print("updateexpenses $postData");
@@ -109,7 +109,8 @@ class _OrderDetailsState extends State<OrderDetails> {
       Orderpickstatusmodel response = orderpickstatusmodelFromJson(result);
 
       if (response.status.toString() == 'SUCCESS') {
-        showInSnackBar(context, response.message.toString());
+        //showInSnackBar(context, response.message.toString());
+        showInSnackBar(context, "Order Picked");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -125,7 +126,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         );
       } else {
         print(response.message.toString());
-        showInSnackBar(context, response.message.toString());
+        // showInSnackBar(context, response.message.toString());
       }
     }
 
@@ -361,26 +362,26 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       ),
                                     )),
                                 SizedBox(height: 8),
-                                Text(
-                                  widget.storeAddress.name.toString(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                // Text(
+                                //   widget.storeAddress.name.toString(),
+                                //   style: TextStyle(
+                                //     fontSize: 16,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
                                 SizedBox(height: 4),
-                                Text(
-                                  // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                  "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Contact : ${widget.storeAddress.mobile}",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
+                                // Text(
+                                //   // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                //   "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
+                                //   style: TextStyle(
+                                //       fontSize: 14, color: Colors.black),
+                                // ),
+                                // SizedBox(height: 4),
+                                // Text(
+                                //   "Contact : ${widget.storeAddress.mobile}",
+                                //   style: TextStyle(
+                                //       fontSize: 14, color: Colors.black),
+                                // ),
                                 SizedBox(height: 16),
                                 HeadingWidget(
                                   title: "Order Details",

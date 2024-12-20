@@ -18,14 +18,14 @@ class OrderConfirmPage extends StatefulWidget {
   final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
-  StoreAddress storeAddress;
+  // StoreAddress storeAddress;
   List<OrderItems> orderitems;
   OrderConfirmPage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
       required this.code,
-      required this.storeAddress,
+      // required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
@@ -397,26 +397,26 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                     ),
                                   ),
                                   SizedBox(height: 8),
-                                  Text(
-                                    widget.storeAddress.name.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Contact : ${widget.storeAddress.mobile}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
+                                  // Text(
+                                  //   widget.storeAddress.name.toString(),
+                                  //   style: TextStyle(
+                                  //     fontSize: 16,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 4),
+                                  // Text(
+                                  //   // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                  //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                                  //   style: TextStyle(
+                                  //       fontSize: 14, color: Colors.black),
+                                  // ),
+                                  // SizedBox(height: 4),
+                                  // Text(
+                                  //   "Contact : ${widget.storeAddress.mobile}",
+                                  //   style: TextStyle(
+                                  //       fontSize: 14, color: Colors.black),
+                                  // ),
                                   SizedBox(height: 16),
                                   // Delivery Information
                                   Container(
@@ -482,7 +482,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                     MaterialPageRoute(
                       builder: (context) => OrderDetails(
                         customerAddress: widget.customerAddress,
-                        storeAddress: widget.storeAddress,
+                        // storeAddress: widget.storeAddress,
                         orderId: widget.orderId,
                         orderitems: widget.orderitems,
                         customerDetails: widget.customerDetails,

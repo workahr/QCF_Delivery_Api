@@ -22,7 +22,7 @@ class Totalfloatingbalance extends StatefulWidget {
 class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
   final NamFoodApiService apiService = NamFoodApiService();
 
-   @override
+  @override
   void initState() {
     super.initState();
 
@@ -77,7 +77,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
           orderListAll = [];
           isLoading = false;
         });
-        showInSnackBar(context, response.message.toString());
+        //showInSnackBar(context, response.message.toString());
       }
     } catch (e) {
       setState(() {
@@ -85,7 +85,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
         orderListAll = [];
         isLoading = false;
       });
-      showInSnackBar(context, 'Error occurred: $e');
+      //showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
@@ -132,8 +132,8 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                           status: earning.totalPrice.toString(),
                           color: AppColors.red,
                           customerAddress: earning.customerAddress,
-                          storeAddress: earning.storeAddress,
-                           customerDetails: earning.customerDetails,
+                          //storeAddress: earning.storeAddress,
+                          customerDetails: earning.customerDetails,
                           orderitems: earning.items,
                           createdDate: createDate.toString()),
                     );
@@ -179,7 +179,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                           status: earning.totalPrice.toString(),
                           color: AppColors.red,
                           customerAddress: earning.customerAddress,
-                          storeAddress: earning.storeAddress,
+                          //  storeAddress: earning.storeAddress,
                           customerDetails: earning.customerDetails,
                           orderitems: earning.items,
                           createdDate: createDate.toString()),
@@ -204,8 +204,8 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
     required Color color,
     required List<OrderItems> orderitems,
     required CustomerAddress customerAddress,
-     required CustomerDetails customerDetails,
-    required StoreAddress storeAddress,
+    required CustomerDetails customerDetails,
+    //required StoreAddress storeAddress,
   }) {
     return GestureDetector(
         onTap: () {
@@ -214,7 +214,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
             MaterialPageRoute(
               builder: (_) => Floatingbalancedetailspage(
                 customerAddress: customerAddress,
-                storeAddress: storeAddress,
+                //storeAddress: storeAddress,
                 customerDetails: customerDetails,
                 orderId: orderId.toString(),
                 time: time.toString(),

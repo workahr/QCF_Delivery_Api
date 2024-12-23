@@ -7,8 +7,11 @@ import 'package:namdelivery/pages/order/order_cancel.dart';
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
 import '../home/delivery_order_list_model.dart';
+import 'map_screen.dart';
 import 'order_details.dart';
 import 'package:another_stepper/another_stepper.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderConfirmPage extends StatefulWidget {
   final String orderId;
@@ -18,14 +21,14 @@ class OrderConfirmPage extends StatefulWidget {
   final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
-  // StoreAddress storeAddress;
+  StoreAddress storeAddress;
   List<OrderItems> orderitems;
   OrderConfirmPage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
       required this.code,
-      // required this.storeAddress,
+      required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
@@ -42,6 +45,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
   @override
   void initState() {
     super.initState();
+    // _getCurrentLocation();
   }
 
   List<StepperData> stepperData = [
@@ -87,6 +91,89 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         )),
   ];
 
+  double? latitude;
+  double? longitude;
+  bool isLoading = true;
+
+  // Destination Coordinates
+  final double destinationLatitude = 10.3788;
+  final double destinationLongitude = 78.3877;
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Please enable location services.")),
+        );
+        setState(() => isLoading = false);
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Location permissions are denied.")),
+          );
+          setState(() => isLoading = false);
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Location permissions are permanently denied.")),
+        );
+        setState(() => isLoading = false);
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+        isLoading = false;
+        _navigateToDestination();
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error fetching location: $e")),
+      );
+    }
+  }
+
+  Future<void> _navigateToDestination() async {
+    if (latitude == null || longitude == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Current location is not available.")),
+      );
+      return;
+    }
+
+    final String googleMapsUrl =
+        "https://www.google.com/maps/dir/?api=1&origin=$latitude,$longitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving";
+
+    final String appleMapsUrl =
+        "https://maps.apple.com/?saddr=$latitude,$longitude&daddr=$destinationLatitude,$destinationLongitude";
+
+    if (await canLaunch(googleMapsUrl)) {
+      await launch(googleMapsUrl);
+    } else if (await canLaunch(appleMapsUrl)) {
+      await launch(appleMapsUrl);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Could not launch map for navigation.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,46 +186,52 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
               ),
             ),
             toolbarHeight: 85,
-            // title:
-            flexibleSpace: Stack(children: [
-              Positioned(
-                  bottom: 1,
-                  left: 40,
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OrderCancel(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                          height: 40,
-                          width: 120,
-                          margin: EdgeInsets.only(bottom: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 217, 216, 216),
-                              width: 0.8,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                          child: Row(children: [
-                            IconButton(
-                              icon: Icon(Icons.close, color: AppColors.red),
-                              onPressed: () {},
-                            ),
-                            Text("Reject",
-                                style: TextStyle(
-                                    color: AppColors.red, fontSize: 16))
-                          ]))))
-            ])),
+            title: Text("Order Confirm",
+                style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold))
+            //  flexibleSpace: Stack(children: [
+
+            // Positioned(
+            //     bottom: 1,
+            //     left: 40,
+            //     child: GestureDetector(
+            //         onTap: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => OrderCancel(),
+            //             ),
+            //           );
+            //         },
+            //         child: Container(
+            //             height: 40,
+            //             width: 120,
+            //             margin: EdgeInsets.only(bottom: 16),
+            //             decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(12),
+            //               border: Border.all(
+            //                 color: const Color.fromARGB(255, 217, 216, 216),
+            //                 width: 0.8,
+            //               ),
+            //               boxShadow: [
+            //                 BoxShadow(
+            //                   color: Colors.white,
+            //                 ),
+            //               ],
+            //             ),
+            //             child: Row(children: [
+            //               IconButton(
+            //                 icon: Icon(Icons.close, color: AppColors.red),
+            //                 onPressed: () {},
+            //               ),
+            //               Text("Reject",
+            //                   style: TextStyle(
+            //                       color: AppColors.red, fontSize: 16))
+            //             ]))))
+            // ])
+            ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -377,67 +470,87 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Pickup Information
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: AppColors.red,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: Text(
-                                      "Pickup",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SimpleMapScreen()),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: AppColors.red,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        child: Text(
+                                          "Pickup",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    widget.storeAddress.name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 8),
-                                  // Text(
-                                  //   widget.storeAddress.name.toString(),
-                                  //   style: TextStyle(
-                                  //     fontSize: 16,
-                                  //     fontWeight: FontWeight.bold,
-                                  //   ),
-                                  // ),
-                                  // SizedBox(height: 4),
-                                  // Text(
-                                  //   // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                  //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                                  //   style: TextStyle(
-                                  //       fontSize: 14, color: Colors.black),
-                                  // ),
-                                  // SizedBox(height: 4),
-                                  // Text(
-                                  //   "Contact : ${widget.storeAddress.mobile}",
-                                  //   style: TextStyle(
-                                  //       fontSize: 14, color: Colors.black),
-                                  // ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Contact : ${widget.storeAddress.mobile}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                   SizedBox(height: 16),
                                   // Delivery Information
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: AppColors.red,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: Text(
-                                      "Delivery",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SimpleMapScreen()),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: AppColors.red,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        child: Text(
+                                          "Delivery",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )),
                                   SizedBox(height: 8),
                                   Text(
                                     widget.customerDetails.fullname.toString(),
@@ -482,7 +595,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                     MaterialPageRoute(
                       builder: (context) => OrderDetails(
                         customerAddress: widget.customerAddress,
-                        // storeAddress: widget.storeAddress,
+                        storeAddress: widget.storeAddress,
                         orderId: widget.orderId,
                         orderitems: widget.orderitems,
                         customerDetails: widget.customerDetails,

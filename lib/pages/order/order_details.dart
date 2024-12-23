@@ -19,14 +19,14 @@ class OrderDetails extends StatefulWidget {
   final String code;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
-  //StoreAddress storeAddress;
+  StoreAddress storeAddress;
   List<OrderItems> orderitems;
   OrderDetails(
       {super.key,
       required this.customerAddress,
       required this.code,
       required this.customerDetails,
-      // required this.storeAddress,
+      required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.totalPrice});
@@ -337,52 +337,70 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                GestureDetector(
-                                    onTap: () {
-                                      _showpickupconfirmDialog();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: AppColors.red,
-                                          width: 1.0,
-                                        ),
-                                        color: AppColors.red,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      child: Text(
-                                        "Pickup",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )),
+                                // GestureDetector(
+                                //     onTap: () {
+                                //       _showpickupconfirmDialog();
+                                //     },
+                                //     child:
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: AppColors.red,
+                                      width: 1.0,
+                                    ),
+                                    color: AppColors.red,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: Text(
+                                    "Pickup",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  // )
+                                ),
                                 SizedBox(height: 8),
-                                // Text(
-                                //   widget.storeAddress.name.toString(),
-                                //   style: TextStyle(
-                                //     fontSize: 16,
-                                //     fontWeight: FontWeight.bold,
-                                //   ),
-                                // ),
+                                Text(
+                                  widget.storeAddress.name.toString(),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 SizedBox(height: 4),
-                                // Text(
-                                //   // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                //   "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
-                                //   style: TextStyle(
-                                //       fontSize: 14, color: Colors.black),
-                                // ),
-                                // SizedBox(height: 4),
-                                // Text(
-                                //   "Contact : ${widget.storeAddress.mobile}",
-                                //   style: TextStyle(
-                                //       fontSize: 14, color: Colors.black),
-                                // ),
+                                Text(
+                                  // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                  "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "Contact : ${widget.storeAddress.mobile}",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
                                 SizedBox(height: 16),
+
+                                Text(
+                                  "Pickup Code",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "12345",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                ),
+                                SizedBox(height: 16),
+
                                 HeadingWidget(
                                   title: "Order Details",
                                   color: AppColors.red,

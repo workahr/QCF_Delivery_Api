@@ -60,7 +60,7 @@ class DeliveryOrderList {
   String? deliveryBoyMobile;
   List<OrderItems> items;
   CustomerAddress customerAddress;
-  //StoreAddress storeAddress;
+  StoreAddress storeAddress;
   CustomerDetails customerDetails;
 
   DeliveryOrderList({
@@ -81,7 +81,7 @@ class DeliveryOrderList {
     this.deliveryBoyMobile,
     required this.items,
     required this.customerAddress,
-    //required this.storeAddress,
+    required this.storeAddress,
     required this.customerDetails,
   });
 
@@ -105,7 +105,7 @@ class DeliveryOrderList {
         items: List<OrderItems>.from(
             json["items"].map((x) => OrderItems.fromJson(x))),
         customerAddress: CustomerAddress.fromJson(json["customer_address"]),
-        //storeAddress: StoreAddress.fromJson(json["store_address"]),
+        storeAddress: StoreAddress.fromJson(json["store_address"]),
         customerDetails: CustomerDetails.fromJson(
             json["customer_details"]), // Parsing new field
       );
@@ -128,7 +128,7 @@ class DeliveryOrderList {
         "delivery_boy_mobile": deliveryBoyMobile,
         "items": List<dynamic>.from(items.map((x) => x.toJson())),
         "customer_address": customerAddress.toJson(),
-        //"store_address": storeAddress.toJson(),
+        "store_address": storeAddress.toJson(),
         "customer_details": customerDetails.toJson(),
       };
 }

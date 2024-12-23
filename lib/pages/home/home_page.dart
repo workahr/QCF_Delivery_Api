@@ -9,6 +9,7 @@ import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
 import '../../widgets/sub_heading_widget.dart';
 import '../models/dashboard_order_list_model.dart';
+import '../order/map_screen.dart';
 import '../order/orderconfirm_page.dart';
 import '../profile/profile_list_model.dart';
 import 'dashboard_delivery_model.dart';
@@ -284,9 +285,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120.0),
+        preferredSize: Size.fromHeight(70.0),
         child: AppBar(
-          toolbarHeight: 100.0,
+          toolbarHeight: 60.0,
           backgroundColor: Color(0xFFE23744),
           automaticallyImplyLeading: false,
           shape: const RoundedRectangleBorder(
@@ -440,6 +441,12 @@ class _HomePageState extends State<HomePage> {
                         if (deliveryBoyDetails != null)
                           _buildCard(
                             onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => MapScreen()),
+                              // );
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -504,7 +511,7 @@ class _HomePageState extends State<HomePage> {
                                       status: order.orderStatus.toString(),
                                       customerAddress: order.customerAddress,
                                       date: order.createdDate.toString(),
-                                      //storeAddress: order.storeAddress,
+                                      storeAddress: order.storeAddress,
                                       totalPrice: order.totalPrice.toString(),
                                       orderitems: order.items,
                                       code: order.code.toString(),
@@ -604,7 +611,7 @@ class _HomePageState extends State<HomePage> {
       required List<OrderItems> orderitems,
       required CustomerAddress customerAddress,
       required CustomerDetails customerDetails,
-      // required StoreAddress storeAddress,
+      required StoreAddress storeAddress,
       required String date,
       required String createddate,
       required String code,
@@ -616,7 +623,7 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(
               builder: (_) => OrderConfirmPage(
                 customerAddress: customerAddress,
-                //storeAddress: storeAddress,
+                storeAddress: storeAddress,
                 orderId: orderId,
                 time: time,
                 totalPrice: totalPrice.toString(),

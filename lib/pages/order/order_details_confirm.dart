@@ -10,6 +10,7 @@ import '../../services/nam_food_api_service.dart';
 import '../../widgets/custom_text_field.dart';
 import '../home/delivery_order_list_model.dart';
 import '../home/home_page.dart';
+import 'map_screen.dart';
 import 'orderpickup_model.dart';
 
 class OrderDetailsConfirm extends StatefulWidget {
@@ -478,6 +479,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                             if (widget.code != deliverycodeControl.text) {
                               showInSnackBar(
                                   context, "Delivery Code is Not Correct");
+                              // _showQRCode();
                             } else if (selectedValue == "Online") {
                               _showQRCode();
                             } else {
@@ -533,8 +535,11 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(AppAssets.dollarIcon,
-                    height: 105, width: 75, color: Colors.black),
+                Image.asset(
+                  AppAssets.qrcode,
+                  height: 505,
+                  width: 305,
+                ),
                 SizedBox(height: 20),
                 Center(
                   child: SizedBox(
@@ -659,32 +664,47 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showcollectcashDialog();
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color: AppColors.red,
-                                                width: 1.0,
-                                              ),
-                                              color: AppColors.red),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          child: Text(
-                                            "Delivery",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     _showcollectcashDialog();
+                                      //   },
+                                      //   child:
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: AppColors.red,
+                                              width: 1.0,
                                             ),
+                                            color: AppColors.red),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 11, vertical: 6),
+                                        child: Text(
+                                          "Delivery",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
+                                        // ),
                                       ),
-                                      Icon(Icons.expand_less),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SimpleMapScreen()),
+                                            );
+                                          },
+                                          child: Image.asset(
+                                            AppAssets.location_map_pic,
+                                            height: 85,
+                                            //width: 305,
+                                          )),
+                                      // Icon(Icons.expand_less),
                                     ]),
                                 SizedBox(height: 8),
                                 Text(
@@ -695,10 +715,43 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                   ),
                                 ),
                                 SizedBox(height: 4),
-                                Text(
-                                  "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
+                                Row(
+                                  children: [
+                                    Text(
+                                      widget.customerAddress.address
+                                                  .toString() ==
+                                              null
+                                          ? ''
+                                          : "${widget.customerAddress.address.toString()},",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
+                                    Text(
+                                      widget.customerAddress.city.toString() ==
+                                              null
+                                          ? ''
+                                          : " ${widget.customerAddress.city.toString()},",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
+                                    Text(
+                                      widget.customerAddress.state.toString() ==
+                                              null
+                                          ? ''
+                                          : " ${widget.customerAddress.state.toString()},",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
+                                    Text(
+                                      widget.customerAddress.pincode
+                                                  .toString() ==
+                                              null
+                                          ? ''
+                                          : " ${widget.customerAddress.pincode.toString()}",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(height: 4),
                                 Text(

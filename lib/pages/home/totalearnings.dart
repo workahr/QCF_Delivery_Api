@@ -166,7 +166,7 @@ class _TotalearningsState extends State<Totalearnings> {
                                 status: earning.deliveryCharges.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
-                                //storeAddress: earning.storeAddress,
+                                storeAddress: earning.storeAddress,
                                 customerDetails: earning.customerDetails,
                                 orderitems: earning.items,
                                 createdDate: createDate.toString()),
@@ -213,8 +213,7 @@ class _TotalearningsState extends State<Totalearnings> {
                                 status: earning.deliveryCharges.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
-
-                                /// storeAddress: earning.storeAddress,
+                                storeAddress: earning.storeAddress,
                                 customerDetails: earning.customerDetails,
                                 orderitems: earning.items,
                                 createdDate: createDate.toString()),
@@ -240,7 +239,7 @@ class _TotalearningsState extends State<Totalearnings> {
     required List<OrderItems> orderitems,
     required CustomerAddress customerAddress,
     required CustomerDetails customerDetails,
-    //required StoreAddress storeAddress,
+    required StoreAddress storeAddress,
   }) {
     return GestureDetector(
         onTap: () {
@@ -249,7 +248,7 @@ class _TotalearningsState extends State<Totalearnings> {
             MaterialPageRoute(
               builder: (_) => EarningsDetailPage(
                 customerAddress: customerAddress,
-                //storeAddress: storeAddress,
+                storeAddress: storeAddress,
                 customerDetails: customerDetails,
                 orderId: orderId.toString(),
                 time: time.toString(),

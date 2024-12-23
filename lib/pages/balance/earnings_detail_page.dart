@@ -13,14 +13,14 @@ class EarningsDetailPage extends StatefulWidget {
   final String deliveryCharges;
   final String CreatedDate;
   CustomerAddress customerAddress;
-  //StoreAddress storeAddress;
+  StoreAddress storeAddress;
   CustomerDetails customerDetails;
   List<OrderItems> orderitems;
   EarningsDetailPage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
-      // required this.storeAddress,
+      required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,

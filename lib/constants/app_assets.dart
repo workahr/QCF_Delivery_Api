@@ -163,4 +163,6 @@ class AppAssets {
   static const String ready_todelivery_icon =
       'assets/images/ready_todelivery_icon.png';
   static const String shoopingbag_icon = 'assets/images/shoopingbag_icon.png';
+  static const String qrcode = 'assets/images/admin_qr_code.jpeg';
+  static const String location_map_pic = 'assets/images/location_map_pic.jpeg';
 }

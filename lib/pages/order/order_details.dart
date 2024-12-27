@@ -4,6 +4,7 @@ import 'package:namdelivery/constants/app_assets.dart';
 import 'package:namdelivery/constants/app_colors.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../services/comFuncService.dart';
 import '../../services/nam_food_api_service.dart';
@@ -254,6 +255,54 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
   }
 
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 18,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 300,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: 18,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 250,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,250 +311,259 @@ class _OrderDetailsState extends State<OrderDetails> {
           backgroundColor: Colors.white,
           toolbarHeight: 60,
           title: Text("Order Details")),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Container(
-                  padding: const EdgeInsets.all(10.0),
-                  margin: EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 217, 216, 216),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: AnotherStepper(
-                    stepperList: stepperData,
-                    stepperDirection: Axis.horizontal,
-                    iconWidth: 40,
-                    iconHeight: 40,
-                    activeBarColor: Color(0xFF7FB032),
-                    inActiveBarColor: Colors.grey,
-                    inverted: true,
-                    verticalGap: 30,
-                    activeIndex: 1,
-                    barThickness: 4,
-                  )),
-              SizedBox(height: 16),
-              // Pickup Details
-              Container(
-                margin: EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 217, 216, 216),
-                    width: 0.8,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white,
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      // Pickup Details
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(children: [
-                                  Text(
-                                    "Order Id  ",
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  Text(
-                                    widget.orderId.toString(),
-                                    style: TextStyle(
-                                        color: AppColors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  )
-                                ]),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                // GestureDetector(
-                                //     onTap: () {
-                                //       _showpickupconfirmDialog();
-                                //     },
-                                //     child:
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: AppColors.red,
-                                      width: 1.0,
-                                    ),
-                                    color: AppColors.red,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  child: Text(
-                                    "Pickup",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  // )
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  widget.storeAddress.name.toString(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                  "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Contact : ${widget.storeAddress.mobile}",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                SizedBox(height: 16),
-
-                                Text(
-                                  "Pickup Code",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "12345",
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                SizedBox(height: 16),
-
-                                HeadingWidget(
-                                  title: "Order Details",
-                                  color: AppColors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.0,
-                                ),
-                                SizedBox(height: 10),
-                                ...widget.orderitems.map((e) {
-                                  return HeadingWidget(
-                                      title:
-                                          "${e.quantity.toString()} x  ${e.productName.toString()}",
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0);
-                                }),
-                                // SizedBox(height: 5),
-                                // HeadingWidget(
-                                //     title: "1 x  Mushroom Briyani",
-                                //     color: AppColors.black,
-                                //     fontWeight: FontWeight.bold,
-                                //     fontSize: 16.0),
-                                // SizedBox(height: 5),
-                                // HeadingWidget(
-                                //     title: "1 x  Mutton Briyani",
-                                //     color: AppColors.black,
-                                //     fontWeight: FontWeight.bold,
-                                //     fontSize: 16.0),
-                              ],
-                            ),
+      body: isLoading
+          ? ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return _buildShimmerPlaceholder();
+              },
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Container(
+                        padding: const EdgeInsets.all(10.0),
+                        margin: EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 217, 216, 216),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: AnotherStepper(
+                          stepperList: stepperData,
+                          stepperDirection: Axis.horizontal,
+                          iconWidth: 40,
+                          iconHeight: 40,
+                          activeBarColor: Color(0xFF7FB032),
+                          inActiveBarColor: Colors.grey,
+                          inverted: true,
+                          verticalGap: 30,
+                          activeIndex: 1,
+                          barThickness: 4,
+                        )),
+                    SizedBox(height: 16),
+                    // Pickup Details
+                    Container(
+                      margin: EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 217, 216, 216),
+                          width: 0.8,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white,
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            // Pickup Details
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(children: [
+                                        Text(
+                                          "Order Id  ",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        Text(
+                                          widget.orderId.toString(),
+                                          style: TextStyle(
+                                              color: AppColors.red,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        )
+                                      ]),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      // GestureDetector(
+                                      //     onTap: () {
+                                      //       _showpickupconfirmDialog();
+                                      //     },
+                                      //     child:
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: AppColors.red,
+                                            width: 1.0,
+                                          ),
+                                          color: AppColors.red,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        child: Text(
+                                          "Pickup",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        // )
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        widget.storeAddress.name.toString(),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        // "No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                        "${widget.storeAddress.address.toString()} ${widget.storeAddress.city.toString()} ${widget.storeAddress.state.toString()} ${widget.storeAddress.zipcode.toString()}",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        "Contact : ${widget.storeAddress.mobile}",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 16),
+
+                                      Text(
+                                        "Pickup Code",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        "12345",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 16),
+
+                                      HeadingWidget(
+                                        title: "Order Details",
+                                        color: AppColors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0,
+                                      ),
+                                      SizedBox(height: 10),
+                                      ...widget.orderitems.map((e) {
+                                        return HeadingWidget(
+                                            title:
+                                                "${e.quantity.toString()} x  ${e.productName.toString()}",
+                                            color: AppColors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0);
+                                      }),
+                                      // SizedBox(height: 5),
+                                      // HeadingWidget(
+                                      //     title: "1 x  Mushroom Briyani",
+                                      //     color: AppColors.black,
+                                      //     fontWeight: FontWeight.bold,
+                                      //     fontSize: 16.0),
+                                      // SizedBox(height: 5),
+                                      // HeadingWidget(
+                                      //     title: "1 x  Mutton Briyani",
+                                      //     color: AppColors.black,
+                                      //     fontWeight: FontWeight.bold,
+                                      //     fontSize: 16.0),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                        padding: EdgeInsets.all(16.0),
+                        width: double.infinity,
+                        margin: EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 217, 216, 216),
+                            width: 0.8,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white,
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: AppColors.red,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    child: Text(
+                                      "Delivery",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  //SizedBox(height: 8),
+                                  Text(
+                                    widget.customerDetails.fullname.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Contact : ${widget.customerDetails.mobile.toString()}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  )
+                                ]))),
+                  ],
                 ),
               ),
-
-              Container(
-                  padding: EdgeInsets.all(16.0),
-                  width: double.infinity,
-                  margin: EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 217, 216, 216),
-                      width: 0.8,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white,
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: AppColors.red,
-                                  width: 1.0,
-                                ),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              child: Text(
-                                "Delivery",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            //SizedBox(height: 8),
-                            Text(
-                              widget.customerDetails.fullname.toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.black),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "Contact : ${widget.customerDetails.mobile.toString()}",
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.black),
-                            )
-                          ]))),
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(

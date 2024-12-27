@@ -91,88 +91,88 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         )),
   ];
 
-  double? latitude;
-  double? longitude;
-  bool isLoading = true;
+  // double? latitude;
+  // double? longitude;
+  // bool isLoading = true;
 
-  // Destination Coordinates
-  final double destinationLatitude = 10.3788;
-  final double destinationLongitude = 78.3877;
+  // // Destination Coordinates
+  // final double destinationLatitude = 10.3788;
+  // final double destinationLongitude = 78.3877;
 
-  Future<void> _getCurrentLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please enable location services.")),
-        );
-        setState(() => isLoading = false);
-        return;
-      }
+  // Future<void> _getCurrentLocation() async {
+  //   try {
+  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //     if (!serviceEnabled) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text("Please enable location services.")),
+  //       );
+  //       setState(() => isLoading = false);
+  //       return;
+  //     }
 
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Location permissions are denied.")),
-          );
-          setState(() => isLoading = false);
-          return;
-        }
-      }
+  //     LocationPermission permission = await Geolocator.checkPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       permission = await Geolocator.requestPermission();
+  //       if (permission == LocationPermission.denied) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text("Location permissions are denied.")),
+  //         );
+  //         setState(() => isLoading = false);
+  //         return;
+  //       }
+  //     }
 
-      if (permission == LocationPermission.deniedForever) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text("Location permissions are permanently denied.")),
-        );
-        setState(() => isLoading = false);
-        return;
-      }
+  //     if (permission == LocationPermission.deniedForever) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //             content: Text("Location permissions are permanently denied.")),
+  //       );
+  //       setState(() => isLoading = false);
+  //       return;
+  //     }
 
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+  //     Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high,
+  //     );
 
-      setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
-        isLoading = false;
-        _navigateToDestination();
-      });
-    } catch (e) {
-      setState(() => isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error fetching location: $e")),
-      );
-    }
-  }
+  //     setState(() {
+  //       latitude = position.latitude;
+  //       longitude = position.longitude;
+  //       isLoading = false;
+  //       _navigateToDestination();
+  //     });
+  //   } catch (e) {
+  //     setState(() => isLoading = false);
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Error fetching location: $e")),
+  //     );
+  //   }
+  // }
 
-  Future<void> _navigateToDestination() async {
-    if (latitude == null || longitude == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Current location is not available.")),
-      );
-      return;
-    }
+  // Future<void> _navigateToDestination() async {
+  //   if (latitude == null || longitude == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Current location is not available.")),
+  //     );
+  //     return;
+  //   }
 
-    final String googleMapsUrl =
-        "https://www.google.com/maps/dir/?api=1&origin=$latitude,$longitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving";
+  //   final String googleMapsUrl =
+  //       "https://www.google.com/maps/dir/?api=1&origin=$latitude,$longitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving";
 
-    final String appleMapsUrl =
-        "https://maps.apple.com/?saddr=$latitude,$longitude&daddr=$destinationLatitude,$destinationLongitude";
+  //   final String appleMapsUrl =
+  //       "https://maps.apple.com/?saddr=$latitude,$longitude&daddr=$destinationLatitude,$destinationLongitude";
 
-    if (await canLaunch(googleMapsUrl)) {
-      await launch(googleMapsUrl);
-    } else if (await canLaunch(appleMapsUrl)) {
-      await launch(appleMapsUrl);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Could not launch map for navigation.")),
-      );
-    }
-  }
+  //   if (await canLaunch(googleMapsUrl)) {
+  //     await launch(googleMapsUrl);
+  //   } else if (await canLaunch(appleMapsUrl)) {
+  //     await launch(appleMapsUrl);
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Could not launch map for navigation.")),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -378,7 +378,27 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       //     ),
                                       //   ),
                                       // ),
-                                    ])
+                                    ]),
+                                SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "PickUp Code : ",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.code.toString(),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ])),
@@ -450,7 +470,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       vertical: 20.0),
                                   child: Dash(
                                     direction: Axis.vertical,
-                                    length: 80, // Adjust length for the spacing
+                                    length: 80,
                                     dashLength: 8,
                                     dashColor: Colors.grey,
                                   ),

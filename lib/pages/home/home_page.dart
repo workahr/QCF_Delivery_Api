@@ -472,7 +472,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             },
-                            imagePath: AppAssets.dollarIcon,
+                            imagePath: AppAssets.rupees_icon,
                             amount: curFormatWithDecimal(
                                     value:
                                         emptyToZero(deliveryBoyDetails!.cash))

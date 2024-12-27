@@ -45,7 +45,8 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
 
     Map<String, dynamic> postData = {
       "order_id": widget.orderitems[0].orderId,
-      "order_status": "Order Delivered"
+      "order_status": "Order Delivered",
+      "customer_code": deliverycodeControl.text,
     };
     print("updateorder $postData");
     var result = await apiService.updateorderpickupstatus(postData);
@@ -53,7 +54,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
     Orderpickstatusmodel response = orderpickstatusmodelFromJson(result);
 
     if (response.status.toString() == 'SUCCESS') {
-      // showInSnackBar(context, response.message.toString());
+      showInSnackBar(context, response.message.toString());
 
       showInSnackBar(context, "Order Delivered Successfully");
       Navigator.pushAndRemoveUntil(
@@ -65,7 +66,7 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
       );
     } else {
       print(response.message.toString());
-      // showInSnackBar(context, response.message.toString());
+      showInSnackBar(context, response.message.toString());
     }
   }
 
@@ -476,9 +477,8 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                             print(widget.code);
                             print("Payment option: $selectedValue");
                             print("type code: ${deliverycodeControl.text}");
-                            if (widget.code != deliverycodeControl.text) {
-                              showInSnackBar(
-                                  context, "Delivery Code is Not Correct");
+                            if (deliverycodeControl.text == "") {
+                              showInSnackBar(context, "Enter a Delivery Code");
                               // _showQRCode();
                             } else if (selectedValue == "Online") {
                               _showQRCode();

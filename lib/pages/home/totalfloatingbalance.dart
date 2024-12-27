@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:namdelivery/pages/models/lotalfloatingbalance_model.dart';
 
 import 'package:namdelivery/widgets/heading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
@@ -91,6 +92,32 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
     setState(() {});
   }
 
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(13), // Add border radius
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,97 +127,104 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
           title: 'Total Floating Balance',
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HeadingWidget(
-                title: "Today Balance",
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              if (ordersForToday.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ordersForToday.length,
-                  itemBuilder: (context, index) {
-                    final earning = ordersForToday[index];
-                    String createDate =
-                        DateFormat('dd-MM-yyyy').format(earning.createdDate);
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: _buildOrderCard(
-                          orderId: earning.invoiceNumber.toString(),
-                          time: earning.prepareMin.toString(),
-                          items: earning.items.length.toString(),
-                          status: earning.totalPrice.toString(),
-                          color: AppColors.red,
-                          customerAddress: earning.customerAddress,
-                          //storeAddress: earning.storeAddress,
-                          customerDetails: earning.customerDetails,
-                          orderitems: earning.items,
-                          createdDate: createDate.toString()),
-                    );
-                  },
-                )
-              else
-                //SizedBox(height: 10.0,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: isLoading
+          ? ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return _buildShimmerPlaceholder();
+              },
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SubHeadingWidget(
-                      title: "No Today Balance",
-                      color: AppColors.black,
+                    HeadingWidget(
+                      title: "Today Balance",
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    if (ordersForToday.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ordersForToday.length,
+                        itemBuilder: (context, index) {
+                          final earning = ordersForToday[index];
+                          String createDate = DateFormat('dd-MM-yyyy')
+                              .format(earning.createdDate);
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: _buildOrderCard(
+                                orderId: earning.invoiceNumber.toString(),
+                                time: earning.prepareMin.toString(),
+                                items: earning.items.length.toString(),
+                                status: earning.totalPrice.toString(),
+                                color: AppColors.red,
+                                customerAddress: earning.customerAddress,
+                                //storeAddress: earning.storeAddress,
+                                customerDetails: earning.customerDetails,
+                                orderitems: earning.items,
+                                createdDate: createDate.toString()),
+                          );
+                        },
+                      )
+                    else
+                      //SizedBox(height: 10.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SubHeadingWidget(
+                            title: "No Today Balance",
+                            color: AppColors.black,
+                          ),
+                        ],
+                      ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    if (ordersNotForToday.isNotEmpty) ...[
+                      HeadingWidget(
+                        title: "Yesterday Balance",
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ordersNotForToday.length,
+                        itemBuilder: (context, index) {
+                          final earning = ordersNotForToday[index];
+                          String createDate = DateFormat('dd-MM-yyyy')
+                              .format(earning.createdDate);
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: _buildOrderCard(
+                                orderId: earning.invoiceNumber.toString(),
+                                time: earning.prepareMin.toString(),
+                                items: earning.items.length.toString(),
+                                status: earning.totalPrice.toString(),
+                                color: AppColors.red,
+                                customerAddress: earning.customerAddress,
+                                //  storeAddress: earning.storeAddress,
+                                customerDetails: earning.customerDetails,
+                                orderitems: earning.items,
+                                createdDate: createDate.toString()),
+                          );
+                        },
+                      ),
+                    ],
                   ],
                 ),
-              SizedBox(
-                height: 10.0,
               ),
-              if (ordersNotForToday.isNotEmpty) ...[
-                HeadingWidget(
-                  title: "Yesterday Balance",
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ordersNotForToday.length,
-                  itemBuilder: (context, index) {
-                    final earning = ordersNotForToday[index];
-                    String createDate =
-                        DateFormat('dd-MM-yyyy').format(earning.createdDate);
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: _buildOrderCard(
-                          orderId: earning.invoiceNumber.toString(),
-                          time: earning.prepareMin.toString(),
-                          items: earning.items.length.toString(),
-                          status: earning.totalPrice.toString(),
-                          color: AppColors.red,
-                          customerAddress: earning.customerAddress,
-                          //  storeAddress: earning.storeAddress,
-                          customerDetails: earning.customerDetails,
-                          orderitems: earning.items,
-                          createdDate: createDate.toString()),
-                    );
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

@@ -20,18 +20,17 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp();
 
   // Initialize Firebase Notifications (if applicable)
   if (!kIsWeb) {
     await FirebaseAPIServices().initNotifications();
+    await Firebase.initializeApp();
+    BaseController baseCtrl = Get.put(BaseController());
+
+    // Ensure the token is retrieved after initialization
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("token $token");
   }
-
-  BaseController baseCtrl = Get.put(BaseController());
-
-  // Ensure the token is retrieved after initialization
-  String? token = await FirebaseMessaging.instance.getToken();
-  print("token $token");
 
   runApp(MyApp());
 }

@@ -386,33 +386,33 @@ class _HomePageState extends State<HomePage> {
                           //   fontWeight: FontWeight.bold,
                           //   vMargin: 1.0,
                           // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SubHeadingWidget(
-                                title: "Duty Status",
-                                color: Colors.white,
-                                fontSize: 17.0,
-                                vMargin: 1.0,
-                              ),
-                              SizedBox(width: 8.0),
-                              Transform.scale(
-                                scale: 0.8,
-                                child: Switch(
-                                  value: isOnDuty,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isOnDuty = value;
-                                    });
-                                  },
-                                  activeColor: Colors.white,
-                                  activeTrackColor: Colors.green,
-                                  inactiveThumbColor: Colors.grey,
-                                  inactiveTrackColor: Colors.grey.shade300,
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     SubHeadingWidget(
+                          //       title: "Duty Status",
+                          //       color: Colors.white,
+                          //       fontSize: 17.0,
+                          //       vMargin: 1.0,
+                          //     ),
+                          //     SizedBox(width: 8.0),
+                          //     Transform.scale(
+                          //       scale: 0.8,
+                          //       child: Switch(
+                          //         value: isOnDuty,
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             isOnDuty = value;
+                          //           });
+                          //         },
+                          //         activeColor: Colors.white,
+                          //         activeTrackColor: Colors.green,
+                          //         inactiveThumbColor: Colors.grey,
+                          //         inactiveTrackColor: Colors.grey.shade300,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       )
                     ],

@@ -198,26 +198,26 @@ class _EarningsDetailPageState extends State<EarningsDetailPage> {
                                     ),
                                   ),
                                   SizedBox(height: 8),
-                                  // Text(
-                                  //   widget.storeAddress.name.toString(),
-                                  //   style: TextStyle(
-                                  //     fontSize: 16,
-                                  //     fontWeight: FontWeight.bold,
-                                  //   ),
-                                  // ),
-                                  // SizedBox(height: 4),
-                                  // Text(
-                                  //   //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                                  //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                                  //   style: TextStyle(
-                                  //       fontSize: 14, color: Colors.black),
-                                  // ),
-                                  // SizedBox(height: 4),
-                                  // Text(
-                                  //  "Contact : ${widget.storeAddress.mobile}",
-                                  //   style: TextStyle(
-                                  //       fontSize: 14, color: Colors.black),
-                                  // ),
+                                  Text(
+                                    widget.storeAddress.name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                                    "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Contact : ${widget.storeAddress.mobile}",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                  ),
                                   SizedBox(height: 16),
                                   // Delivery Information
                                   Container(

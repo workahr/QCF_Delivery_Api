@@ -492,12 +492,12 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   // Pickup Information
                                   GestureDetector(
                                       onTap: () async {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SimpleMapScreen()),
-                                        );
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (context) =>
+                                        //           SimpleMapScreen()),
+                                        // );
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -544,12 +544,12 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                   // Delivery Information
                                   GestureDetector(
                                       onTap: () async {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SimpleMapScreen()),
-                                        );
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (context) =>
+                                        //           SimpleMapScreen()),
+                                        // );
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(

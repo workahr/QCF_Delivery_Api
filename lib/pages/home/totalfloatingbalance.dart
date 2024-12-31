@@ -166,7 +166,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                                 status: earning.totalPrice.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
-                                //storeAddress: earning.storeAddress,
+                                storeAddress: earning.storeAddress,
                                 customerDetails: earning.customerDetails,
                                 orderitems: earning.items,
                                 createdDate: createDate.toString()),
@@ -213,7 +213,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                                 status: earning.totalPrice.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
-                                //  storeAddress: earning.storeAddress,
+                                storeAddress: earning.storeAddress,
                                 customerDetails: earning.customerDetails,
                                 orderitems: earning.items,
                                 createdDate: createDate.toString()),
@@ -239,7 +239,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
     required List<OrderItems> orderitems,
     required CustomerAddress customerAddress,
     required CustomerDetails customerDetails,
-    //required StoreAddress storeAddress,
+    required StoreAddress storeAddress,
   }) {
     return GestureDetector(
         onTap: () {
@@ -248,7 +248,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
             MaterialPageRoute(
               builder: (_) => Floatingbalancedetailspage(
                 customerAddress: customerAddress,
-                //storeAddress: storeAddress,
+                storeAddress: storeAddress,
                 customerDetails: customerDetails,
                 orderId: orderId.toString(),
                 time: time.toString(),

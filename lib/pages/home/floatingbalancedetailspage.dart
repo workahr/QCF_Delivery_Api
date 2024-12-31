@@ -17,14 +17,14 @@ class Floatingbalancedetailspage extends StatefulWidget {
   final String totalPrice;
   final String CreatedDate;
   CustomerAddress customerAddress;
-  // StoreAddress storeAddress;
+  StoreAddress storeAddress;
   CustomerDetails customerDetails;
   List<OrderItems> orderitems;
   Floatingbalancedetailspage(
       {super.key,
       required this.customerAddress,
       required this.customerDetails,
-      // required this.storeAddress,
+      required this.storeAddress,
       required this.orderitems,
       required this.orderId,
       required this.time,
@@ -226,26 +226,30 @@ class _FloatingbalancedetailspageState
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // Text(
-                        //   widget.storeAddress.name.toString(),
-                        //   style: TextStyle(
-                        //     fontSize: 16,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 4),
-                        // Text(
-                        //   //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
-                        //   "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
-                        //   style: const TextStyle(
-                        //       fontSize: 14, color: Colors.black),
-                        // ),
-                        // const SizedBox(height: 4),
-                        // Text(
-                        //   "Contact : ${widget.storeAddress.mobile}",
-                        //   style: const TextStyle(
-                        //       fontSize: 14, color: Colors.black),
-                        // ),
+                        Text(
+                          widget.storeAddress.name.toString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                            width: MediaQuery.of(context).size.width / 1.4,
+                            child: Text(
+                              //"No 37 Paranjothi Nagar Thylakoid, velour Nagar Trichy-620005",
+                              "${widget.storeAddress.address.toString()}, ${widget.storeAddress.city.toString()}, ${widget.storeAddress.state.toString()}, ${widget.storeAddress.zipcode.toString()}",
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            )),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Contact : ${widget.storeAddress.mobile}",
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
+                        ),
                         const SizedBox(height: 16),
                         Container(
                           decoration: BoxDecoration(
@@ -272,11 +276,15 @@ class _FloatingbalancedetailspageState
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.black),
-                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width / 1.4,
+                            child: Text(
+                              "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            )),
                         const SizedBox(height: 4),
                         Text(
                           "Contact : ${widget.customerDetails.mobile.toString()}",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:namdelivery/constants/app_assets.dart';
 import 'package:namdelivery/constants/app_colors.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -460,6 +461,11 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                       width: double.infinity,
                       child: CustomeTextField(
                         control: deliverycodeControl,
+                        type: const TextInputType.numberWithOptions(),
+                        inputFormaters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^-?(\d+)?\.?\d{0,11}'))
+                        ],
                         prefixIcon: Icon(
                           Icons.lock_rounded,
                           color: AppColors.red,
@@ -696,7 +702,19 @@ class _OrderDetailsConfirmState extends State<OrderDetailsConfirm> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      SimpleMapScreen()),
+                                                      SimpleMapScreen(
+                                                        lat: widget.customerAddress
+                                                                    .latitude ==
+                                                                null
+                                                            ? " " //"10.3788"
+                                                            : "${widget.customerAddress.latitude}",
+                                                        long: widget.customerAddress
+                                                                    .longitude
+                                                                    .toString() ==
+                                                                null
+                                                            ? " " //"78.3877"
+                                                            : "${widget.customerAddress.longitude.toString()}",
+                                                      )),
                                             );
                                           },
                                           child: Image.asset(

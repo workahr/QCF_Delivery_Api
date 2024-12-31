@@ -138,6 +138,8 @@ class CustomerAddress {
   int? orderId;
   String? address;
   String? landmark;
+  String? latitude;
+  String? longitude;
   String? city;
   String? state;
   String? country;
@@ -151,6 +153,8 @@ class CustomerAddress {
     this.orderId,
     this.address,
     this.landmark,
+    this.latitude,
+    this.longitude,
     this.city,
     this.state,
     this.country,
@@ -166,6 +170,8 @@ class CustomerAddress {
         orderId: json["order_id"],
         address: json["address"],
         landmark: json["landmark"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
         city: json["city"],
         state: json["state"],
         country: json["country"],
@@ -180,6 +186,8 @@ class CustomerAddress {
         "order_id": orderId,
         "address": address,
         "landmark": landmark,
+        "latitude": latitude,
+        "longitude": longitude,
         "city": city,
         "state": state,
         "country": country,

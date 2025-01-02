@@ -19,6 +19,7 @@ class OrderConfirmPage extends StatefulWidget {
   final String totalPrice;
   final String date;
   final String code;
+  final String orderstatus;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   StoreAddress storeAddress;
@@ -33,6 +34,7 @@ class OrderConfirmPage extends StatefulWidget {
       required this.orderId,
       required this.time,
       required this.date,
+      required this.orderstatus,
       required this.totalPrice});
 
   @override
@@ -46,6 +48,15 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
   void initState() {
     super.initState();
     // _getCurrentLocation();
+  }
+
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri telUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(telUri)) {
+      await launchUrl(telUri);
+    } else {
+      throw 'Could not launch $telUri';
+    }
   }
 
   List<StepperData> stepperData = [
@@ -470,7 +481,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       vertical: 20.0),
                                   child: Dash(
                                     direction: Axis.vertical,
-                                    length: 80,
+                                    length: 100,
                                     dashLength: 8,
                                     dashColor: Colors.grey,
                                   ),
@@ -490,16 +501,11 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Pickup Information
-                                  GestureDetector(
-                                      onTap: () async {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //       builder: (context) =>
-                                        //           SimpleMapScreen()),
-                                        // );
-                                      },
-                                      child: Container(
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8),
@@ -518,7 +524,35 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      )),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //       builder: (context) =>
+                                            //           SimpleMapScreen(
+                                            //             lat: widget.customerAddress
+                                            //                         .latitude ==
+                                            //                     null
+                                            //                 ? " " //"10.3788"
+                                            //                 : "${widget.customerAddress.latitude}",
+                                            //             long: widget.customerAddress
+                                            //                         .longitude
+                                            //                         .toString() ==
+                                            //                     null
+                                            //                 ? " " //"78.3877"
+                                            //                 : "${widget.customerAddress.longitude.toString()}",
+                                            //           )),
+                                            // );
+                                          },
+                                          child: Image.asset(
+                                            AppAssets.location_map_pic,
+                                            height: 75,
+                                            //width: 305,
+                                          )),
+                                    ],
+                                  ),
                                   SizedBox(height: 8),
                                   Text(
                                     widget.storeAddress.name.toString(),
@@ -535,23 +569,43 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                         fontSize: 14, color: Colors.black),
                                   ),
                                   SizedBox(height: 4),
-                                  Text(
-                                    "Contact : ${widget.storeAddress.mobile}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Contact : ${widget.storeAddress.mobile}",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            _makePhoneCall(widget
+                                                .storeAddress.mobile
+                                                .toString());
+                                          },
+                                          child: Image.asset(
+                                              AppAssets.call_iconfill,
+                                              height: 35,
+                                              width: 35)),
+                                    ],
                                   ),
-                                  SizedBox(height: 16),
+                                  SizedBox(height: 10),
+                                  Dash(
+                                    direction: Axis.horizontal,
+                                    length:
+                                        MediaQuery.of(context).size.width / 1.5,
+                                    dashLength: 8,
+                                    dashColor: Colors.grey,
+                                  ),
+
+                                  SizedBox(height: 20),
                                   // Delivery Information
-                                  GestureDetector(
-                                      onTap: () async {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //       builder: (context) =>
-                                        //           SimpleMapScreen()),
-                                        // );
-                                      },
-                                      child: Container(
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8),
@@ -570,27 +624,122 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      )),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SimpleMapScreen(
+                                                        lat: widget.customerAddress
+                                                                    .latitude ==
+                                                                null
+                                                            ? " " //"10.3788"
+                                                            : "${widget.customerAddress.latitude}",
+                                                        long: widget.customerAddress
+                                                                    .longitude
+                                                                    .toString() ==
+                                                                null
+                                                            ? " " //"78.3877"
+                                                            : "${widget.customerAddress.longitude.toString()}",
+                                                      )),
+                                            );
+                                          },
+                                          child: Image.asset(
+                                            AppAssets.location_map_pic,
+                                            height: 75,
+                                            //width: 305,
+                                          )),
+                                    ],
+                                  ),
                                   SizedBox(height: 8),
-                                  Text(
-                                    widget.customerDetails.fullname.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SimpleMapScreen(
+                                                      lat:
+                                                          widget.customerAddress
+                                                              .latitude,
+                                                      long: widget
+                                                          .customerAddress
+                                                          .longitude)),
+                                        );
+                                      },
+                                      child: Text(
+                                        widget.customerDetails.fullname
+                                                    .toString() ==
+                                                "null"
+                                            ? ' '
+                                            : widget.customerDetails.fullname
+                                                .toString(),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
                                   SizedBox(height: 4),
-                                  Text(
-                                    "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SimpleMapScreen(
+                                                      lat:
+                                                          widget.customerAddress
+                                                              .latitude,
+                                                      long: widget
+                                                          .customerAddress
+                                                          .longitude)),
+                                        );
+                                      },
+                                      child: Text(
+                                        "${widget.customerAddress.address.toString()}, ${widget.customerAddress.city.toString()}, ${widget.customerAddress.state.toString()}, ${widget.customerAddress.pincode.toString()}",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                      )),
                                   SizedBox(height: 4),
-                                  Text(
-                                    "Contact : ${widget.customerDetails.mobile.toString()}",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () async {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SimpleMapScreen(
+                                                          lat: widget
+                                                              .customerAddress
+                                                              .latitude,
+                                                          long: widget
+                                                              .customerAddress
+                                                              .longitude)),
+                                            );
+                                          },
+                                          child: Text(
+                                            "Contact : ${widget.customerDetails.mobile.toString()}",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          )),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            _makePhoneCall(widget
+                                                .storeAddress.mobile
+                                                .toString());
+                                          },
+                                          child: Image.asset(
+                                              AppAssets.call_iconfill,
+                                              height: 35,
+                                              width: 35)),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -621,6 +770,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                         customerDetails: widget.customerDetails,
                         totalPrice: widget.totalPrice,
                         code: widget.code,
+                        orderstatus: widget.orderstatus,
                       ),
                     ),
                   );

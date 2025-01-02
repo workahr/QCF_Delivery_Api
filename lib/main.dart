@@ -44,8 +44,9 @@ Future<void> main() async {
   // Initialize Firebase
 
   // Initialize Firebase Notifications (if applicable)
-  // if (!kIsWeb) {
-  //   await FirebaseAPIServices().initNotifications();
+  if (!kIsWeb) {
+    await FirebaseAPIServices().initNotifications();
+  }
   //   await Firebase.initializeApp();
   BaseController baseCtrl = Get.put(BaseController());
 
@@ -53,7 +54,7 @@ Future<void> main() async {
   String? token = await FirebaseMessaging.instance.getToken();
   print("token $token");
   // }
-
+  baseCtrl.fbUserId = token;
   runApp(MyApp());
 }
 
@@ -74,10 +75,11 @@ Future<void> showNotification(RemoteMessage message) async {
   const NotificationDetails platformDetails =
       NotificationDetails(android: androidDetails);
   print(platformDetails);
-
+  int? notificationId; // nullable
+  notificationId ??= 12;
   // Show the notification
   await flutterLocalNotificationsPlugin.show(
-    0,
+    notificationId,
     message.notification?.title,
     message.notification?.body,
     platformDetails,

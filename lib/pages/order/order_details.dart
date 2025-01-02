@@ -18,6 +18,7 @@ class OrderDetails extends StatefulWidget {
   final String orderId;
   final String totalPrice;
   final String code;
+  final String orderstatus;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   StoreAddress storeAddress;
@@ -30,6 +31,7 @@ class OrderDetails extends StatefulWidget {
       required this.storeAddress,
       required this.orderitems,
       required this.orderId,
+      required this.orderstatus,
       required this.totalPrice});
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
@@ -216,7 +218,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                   //     builder: (context) => OrderDetailsConfirm(),
                   //   ),
                   // );
-                  updateorderpickupstatus();
+
+                  if (widget.orderstatus == "Ready to Pickup") {
+                    updateorderpickupstatus();
+                  } else {
+                    showInSnackBar(
+                        context, "Still Store Status is not Updated");
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.red,
@@ -541,7 +549,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   ),
                                   //SizedBox(height: 8),
                                   Text(
-                                    widget.customerDetails.fullname.toString(),
+                                    widget.customerDetails.fullname
+                                                .toString() ==
+                                            "null"
+                                        ? ' '
+                                        : widget.customerDetails.fullname
+                                            .toString(),
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

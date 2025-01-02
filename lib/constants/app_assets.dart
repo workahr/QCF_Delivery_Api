@@ -166,4 +166,5 @@ class AppAssets {
   static const String qrcode = 'assets/images/admin_qr_code.jpeg';
   static const String location_map_pic = 'assets/images/location_map_pic.jpeg';
   static const String rupees_icon = 'assets/images/rupees_icon.png';
+  static const String call_iconfill = 'assets/images/call_iconfill.png';
 }

@@ -269,7 +269,9 @@ class _FloatingbalancedetailspageState
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          widget.customerDetails.fullname.toString(),
+                          widget.customerDetails.fullname.toString() == "null"
+                              ? ' '
+                              : widget.customerDetails.fullname.toString(),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

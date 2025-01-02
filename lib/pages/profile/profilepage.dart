@@ -383,6 +383,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       ),
                     ),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          children: [
+                            Text("Powered By:"),
+                            Text("www.profitdelivery.in"),
+                          ],
+                        )),
                   ],
                 ),
               ));

@@ -195,6 +195,14 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    Text("Powered By:"),
+                    Text("www.profitdelivery.in"),
+                  ],
+                )),
           ],
         ),
       ),

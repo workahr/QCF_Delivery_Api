@@ -172,17 +172,26 @@ class _TripsListPageState extends State<TripsListPage> {
                               itemBuilder: (context, index) {
                                 final order = orderList[index];
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12.0),
-                                  child: _buildOrderCard(
-                                    orderId: order.invoiceNumber.toString(),
-                                    time: order.prepareMin.toString(),
-                                    items: order.items.length.toString(),
-                                    status: order.orderStatus.toString(),
-                                    color: order.orderStatus == "Order Placed"
-                                        ? AppColors.green
-                                        : AppColors.darkgold,
-                                  ),
-                                );
+                                    padding:
+                                        const EdgeInsets.only(bottom: 12.0),
+                                    child: Column(
+                                      children: [
+                                        if (order.orderStatus != "Cancelled")
+                                          _buildOrderCard(
+                                            orderId:
+                                                order.invoiceNumber.toString(),
+                                            time: order.prepareMin.toString(),
+                                            items:
+                                                order.items.length.toString(),
+                                            status:
+                                                order.orderStatus.toString(),
+                                            color: order.orderStatus ==
+                                                    "Order Placed"
+                                                ? AppColors.green
+                                                : AppColors.darkgold,
+                                          ),
+                                      ],
+                                    ));
                               },
                             ),
                         ]))));

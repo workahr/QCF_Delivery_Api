@@ -503,7 +503,8 @@ class _HomePageState extends State<HomePage> {
                             final order = orderList[index];
                             return Column(
                               children: [
-                                if (order.orderStatus != "Order Delivered")
+                                if (order.orderStatus != "Order Delivered" &&
+                                    order.orderStatus != "Cancelled")
                                   _buildOrderCard(
                                       orderId: order.invoiceNumber.toString(),
                                       time: order.prepareMin.toString(),
@@ -515,6 +516,7 @@ class _HomePageState extends State<HomePage> {
                                       totalPrice: order.totalPrice.toString(),
                                       orderitems: order.items,
                                       code: order.code.toString(),
+                                      orderstatus: order.orderStatus.toString(),
                                       createddate: order.createdDate.toString(),
                                       customerDetails: order.customerDetails),
                                 SizedBox(height: 12.0),
@@ -615,6 +617,7 @@ class _HomePageState extends State<HomePage> {
       required String date,
       required String createddate,
       required String code,
+      required String orderstatus,
       String? totalPrice}) {
     return GestureDetector(
         onTap: () {
@@ -631,6 +634,7 @@ class _HomePageState extends State<HomePage> {
                 customerDetails: customerDetails,
                 date: date,
                 code: code,
+                orderstatus: orderstatus,
               ),
             ),
           );

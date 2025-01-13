@@ -731,7 +731,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                       GestureDetector(
                                           onTap: () async {
                                             _makePhoneCall(widget
-                                                .storeAddress.mobile
+                                                .customerDetails.mobile
                                                 .toString());
                                           },
                                           child: Image.asset(

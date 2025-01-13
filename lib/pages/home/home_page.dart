@@ -10,6 +10,7 @@ import '../../services/nam_food_api_service.dart';
 import '../../widgets/sub_heading_widget.dart';
 import '../models/dashboard_order_list_model.dart';
 import '../order/map_screen.dart';
+import '../order/order_details_confirm.dart';
 import '../order/orderconfirm_page.dart';
 import '../profile/profile_list_model.dart';
 import 'dashboard_delivery_model.dart';
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
-      print("4");
+      print("hello1");
       var result = await apiService.getAllDeliveryBoyOrders();
       var response = deliveryOrderListModelFromJson(result);
       print("hello");
@@ -621,23 +622,39 @@ class _HomePageState extends State<HomePage> {
       String? totalPrice}) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => OrderConfirmPage(
-                customerAddress: customerAddress,
-                storeAddress: storeAddress,
-                orderId: orderId,
-                time: time,
-                totalPrice: totalPrice.toString(),
-                orderitems: orderitems,
-                customerDetails: customerDetails,
-                date: date,
-                code: code,
-                orderstatus: orderstatus,
+          if (status != "Order Picked") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => OrderConfirmPage(
+                  customerAddress: customerAddress,
+                  storeAddress: storeAddress,
+                  orderId: orderId,
+                  time: time,
+                  totalPrice: totalPrice.toString(),
+                  orderitems: orderitems,
+                  customerDetails: customerDetails,
+                  date: date,
+                  code: code,
+                  orderstatus: orderstatus,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderDetailsConfirm(
+                  orderId: orderId.toString(),
+                  customerAddress: customerAddress,
+                  customerDetails: customerDetails,
+                  orderitems: orderitems,
+                  totalPrice: totalPrice.toString(),
+                  code: code,
+                ),
+              ),
+            );
+          }
         },
         child: Container(
           padding: EdgeInsets.all(16.0),

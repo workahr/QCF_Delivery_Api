@@ -299,8 +299,8 @@ class StoreAddress {
   int? status;
   int? createdBy;
   String? createdDate;
-  dynamic updatedBy;
-  dynamic updatedDate;
+  int? updatedBy;
+  String? updatedDate;
   String? slug;
   int storeStatus;
 
@@ -325,8 +325,8 @@ class StoreAddress {
     this.status,
     this.createdBy,
     this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
+    this.updatedBy,
+    this.updatedDate,
     this.slug,
     required this.storeStatus,
   });
@@ -400,7 +400,7 @@ class CustomerDetails {
   int? createdBy;
   DateTime createdDate;
   int? updatedBy;
-  DateTime updatedDate;
+  String? updatedDate;
   String? mobilePushId;
   String? imageUrl;
   String? licenseNo;
@@ -428,7 +428,7 @@ class CustomerDetails {
     this.createdBy,
     required this.createdDate,
     this.updatedBy,
-    required this.updatedDate,
+    this.updatedDate,
     this.mobilePushId,
     this.imageUrl,
     this.licenseNo,
@@ -458,7 +458,7 @@ class CustomerDetails {
         createdBy: json["created_by"],
         createdDate: DateTime.parse(json["created_date"]),
         updatedBy: json["updated_by"],
-        updatedDate: DateTime.parse(json["updated_date"]),
+        updatedDate: json["updated_date"],
         mobilePushId: json["mobile_push_id"],
         imageUrl: json["image_url"],
         licenseNo: json["license_no"],
@@ -487,7 +487,7 @@ class CustomerDetails {
         "created_by": createdBy,
         "created_date": createdDate.toIso8601String(),
         "updated_by": updatedBy,
-        "updated_date": updatedDate.toIso8601String(),
+        "updated_date": updatedDate,
         "mobile_push_id": mobilePushId,
         "image_url": imageUrl,
         "license_no": licenseNo,

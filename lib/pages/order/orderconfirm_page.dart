@@ -20,6 +20,7 @@ class OrderConfirmPage extends StatefulWidget {
   final String date;
   final String code;
   final String orderstatus;
+  final String store_accept_date;
   CustomerAddress customerAddress;
   CustomerDetails customerDetails;
   StoreAddress storeAddress;
@@ -35,6 +36,7 @@ class OrderConfirmPage extends StatefulWidget {
       required this.time,
       required this.date,
       required this.orderstatus,
+      required this.store_accept_date,
       required this.totalPrice});
 
   @override
@@ -349,6 +351,31 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
                                     ),
                                   ),
                                 ]),
+                                SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Order Accept Time: ",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.store_accept_date != "null"
+                                          ? DateFormat('hh:mm a').format(
+                                              DateTime.parse(widget
+                                                  .store_accept_date!) // Parse the string to DateTime
+                                              )
+                                          : "",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(height: 4),
                                 Row(
                                     mainAxisAlignment:

@@ -516,6 +516,8 @@ class _HomePageState extends State<HomePage> {
                                       storeAddress: order.storeAddress,
                                       totalPrice: order.totalPrice.toString(),
                                       orderitems: order.items,
+                                      store_accept_date:
+                                          order.store_accept_date.toString(),
                                       code: order.code.toString(),
                                       orderstatus: order.orderStatus.toString(),
                                       createddate: order.createdDate.toString(),
@@ -617,6 +619,7 @@ class _HomePageState extends State<HomePage> {
       required StoreAddress storeAddress,
       required String date,
       required String createddate,
+      required String store_accept_date,
       required String code,
       required String orderstatus,
       String? totalPrice}) {
@@ -634,6 +637,7 @@ class _HomePageState extends State<HomePage> {
                   totalPrice: totalPrice.toString(),
                   orderitems: orderitems,
                   customerDetails: customerDetails,
+                  store_accept_date: store_accept_date,
                   date: date,
                   code: code,
                   orderstatus: orderstatus,

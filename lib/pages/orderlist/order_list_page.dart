@@ -150,8 +150,6 @@ class _OrderListPageState extends State<OrderListPage> {
     setState(() {});
   }
 
-
-  
   Widget _buildShimmerPlaceholder() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -178,7 +176,6 @@ class _OrderListPageState extends State<OrderListPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,7 +187,7 @@ class _OrderListPageState extends State<OrderListPage> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body:isLoading
+      body: isLoading
           ? ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) {
@@ -225,6 +222,8 @@ class _OrderListPageState extends State<OrderListPage> {
                               time: order.prepareMin.toString(),
                               items: order.items.length.toString(),
                               status: order.orderStatus.toString(),
+                              pickuptime: order.pickup_date.toString(),
+                              deliverytime: order.delivered_date.toString(),
                               //reachingTime: order.reachingTime.toString(),
                               color: AppColors.green,
                             ),
@@ -267,6 +266,8 @@ class _OrderListPageState extends State<OrderListPage> {
                               time: order.prepareMin.toString(),
                               items: order.items.length.toString(),
                               status: order.orderStatus.toString(),
+                              pickuptime: order.pickup_date.toString(),
+                              deliverytime: order.delivered_date.toString(),
                               //reachingTime: order.reachingTime.toString(),
                               color: AppColors.red,
                             ),
@@ -287,6 +288,8 @@ class _OrderListPageState extends State<OrderListPage> {
     required String time,
     required String items,
     required String status,
+    String? pickuptime,
+    String? deliverytime,
     String? reachingTime = "",
     required Color color,
   }) {
@@ -307,7 +310,7 @@ class _OrderListPageState extends State<OrderListPage> {
                 Row(
                   children: [
                     HeadingWidget(
-                      title: "Order ID ",
+                      title: "Order ID         : ",
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                       fontSize: 16.0,
@@ -323,11 +326,71 @@ class _OrderListPageState extends State<OrderListPage> {
                 SizedBox(height: 4.0),
                 Row(
                   children: [
+                    HeadingWidget(
+                      title: "Pick up Time : ",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 16.0,
+                    ),
+                    Text(
+                      pickuptime != "null"
+                          ? DateFormat('hh:mm a').format(DateTime.parse(
+                                  pickuptime!) // Parse the string to DateTime
+                              )
+                          : "",
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    HeadingWidget(
+                      title: "Delivery Time: ",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      fontSize: 16.0,
+                    ),
+                    Text(
+                      deliverytime != "null"
+                          ? DateFormat('hh:mm a').format(DateTime.parse(
+                                  deliverytime!) // Parse the string to DateTime
+                              )
+                          : "", // deliverytime.toString(),
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
                       "$time mins | $items items $reachingTime",
                       style: TextStyle(
                         color: AppColors.black,
                         fontSize: 14.0,
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Text(
+                        status,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
                       ),
                     ),
                   ],
@@ -337,21 +400,7 @@ class _OrderListPageState extends State<OrderListPage> {
           ),
           // Status Badge
 
-          SizedBox(width: 8.0),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Text(
-              status,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.0,
-              ),
-            ),
-          ),
+          // SizedBox(width: 8.0),
         ],
       ),
     );

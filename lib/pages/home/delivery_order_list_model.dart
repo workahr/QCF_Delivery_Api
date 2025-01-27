@@ -52,12 +52,15 @@ class DeliveryOrderList {
   String? paymentMethod;
   int? prepareMin;
   DateTime createdDate;
+  String? store_accept_date;
   int? userId;
   String? deliveryPartnerId;
   String? customerName;
   String? customerMobile;
   String? deliveryBoyName;
   String? deliveryBoyMobile;
+  String? pickup_date;
+  String? delivered_date;
   List<OrderItems> items;
   CustomerAddress customerAddress;
   StoreAddress storeAddress;
@@ -79,6 +82,9 @@ class DeliveryOrderList {
     this.customerMobile,
     this.deliveryBoyName,
     this.deliveryBoyMobile,
+    this.delivered_date,
+    this.pickup_date,
+    this.store_accept_date,
     required this.items,
     required this.customerAddress,
     required this.storeAddress,
@@ -96,7 +102,12 @@ class DeliveryOrderList {
         paymentMethod: json["payment_method"],
         prepareMin: json["prepare_min"],
         createdDate: DateTime.parse(json["created_date"]),
+        // delivered_date: DateTime.parse(json["delivered_date"]),
+        // pickup_date: DateTime.parse(json["pickup_date"]),
+        delivered_date: json["delivered_date"],
+        pickup_date: json["pickup_date"],
         userId: json["user_id"],
+        store_accept_date: json["store_accept_date"],
         deliveryPartnerId: json["delivery_partner_id"],
         customerName: json["customer_name"],
         customerMobile: json["customer_mobile"],
@@ -120,6 +131,9 @@ class DeliveryOrderList {
         "payment_method": paymentMethod,
         "prepare_min": prepareMin,
         "created_date": createdDate.toIso8601String(),
+        "delivered_date": delivered_date,
+        "pickup_date": pickup_date,
+        "store_accept_date": store_accept_date,
         "user_id": userId,
         "delivery_partner_id": deliveryPartnerId,
         "customer_name": customerName,

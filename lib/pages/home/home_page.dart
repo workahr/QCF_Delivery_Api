@@ -482,6 +482,52 @@ class _HomePageState extends State<HomePage> {
                           ),
                       ],
                     ),
+                    SizedBox(height: 10.0),
+                    Row(
+                      children: [
+                        if (deliveryBoyDetails != null)
+                          _buildCard(
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => MapScreen()),
+                              // );
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Totalearnings(),
+                                ),
+                              );
+                            },
+                            imagePath: AppAssets.deliveryboy_handcash,
+                            amount: curFormatWithDecimal(
+                                    value: emptyToZero(
+                                        deliveryBoyDetails!.today_earn))
+                                .toString(),
+                            label: "Today earnings",
+                          ),
+                        SizedBox(width: 12.0),
+                        if (deliveryBoyDetails != null)
+                          _buildCard(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Totalfloatingbalance(),
+                                ),
+                              );
+                            },
+                            imagePath: AppAssets.deliveryboy_todayearn,
+                            amount: curFormatWithDecimal(
+                                    value: emptyToZero(
+                                        deliveryBoyDetails!.today_cash))
+                                .toString(),
+                            label: "Today balance Cash",
+                          ),
+                      ],
+                    ),
 
                     SizedBox(height: 20.0),
                     // Recent Orders Heading

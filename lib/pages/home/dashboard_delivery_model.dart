@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 DashboardDeliveryModel dashboardDeliveryModelFromJson(String str) =>
@@ -40,11 +39,15 @@ class DeliveryEarningData {
   String cash;
   String myEarn;
   String allAmount;
+  String today_cash;
+  String today_earn;
 
   DeliveryEarningData({
     required this.cash,
     required this.myEarn,
     required this.allAmount,
+    required this.today_cash,
+    required this.today_earn,
   });
 
   factory DeliveryEarningData.fromJson(Map<String, dynamic> json) =>
@@ -52,12 +55,16 @@ class DeliveryEarningData {
         cash: _convertToString(json["cash"]),
         myEarn: _convertToString(json["my_earn"]),
         allAmount: _convertToString(json["all_amount"]),
+        today_cash: json["today_cash"],
+        today_earn: json["today_earn"],
       );
 
   Map<String, dynamic> toJson() => {
         "cash": cash,
         "my_earn": myEarn,
         "all_amount": allAmount,
+        "today_cash": today_cash,
+        "today_earn": today_earn,
       };
 
   // Helper function to handle dynamic types

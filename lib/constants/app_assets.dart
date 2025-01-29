@@ -167,4 +167,7 @@ class AppAssets {
   static const String location_map_pic = 'assets/images/location_map_pic.jpeg';
   static const String rupees_icon = 'assets/images/rupees_icon.png';
   static const String call_iconfill = 'assets/images/call_iconfill.png';
+  static const String deliveryboy_handcash = 'assets/images/deliveryboy_handcash.png';
+   static const String deliveryboy_todayearn = 'assets/images/deliveryboy_todayearn.png';
+  
 }

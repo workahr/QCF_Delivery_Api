@@ -164,6 +164,8 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                                 time: earning.prepareMin.toString(),
                                 items: earning.items.length.toString(),
                                 status: earning.totalPrice.toString(),
+                                deliveryCharges:
+                                    earning.deliveryCharges.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
                                 storeAddress: earning.storeAddress,
@@ -211,6 +213,8 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                                 time: earning.prepareMin.toString(),
                                 items: earning.items.length.toString(),
                                 status: earning.totalPrice.toString(),
+                                deliveryCharges:
+                                    earning.deliveryCharges.toString(),
                                 color: AppColors.red,
                                 customerAddress: earning.customerAddress,
                                 storeAddress: earning.storeAddress,
@@ -235,6 +239,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
     required String items,
     required String status,
     required String createdDate,
+    required String deliveryCharges,
     required Color color,
     required List<OrderItems> orderitems,
     required CustomerAddress customerAddress,
@@ -251,6 +256,7 @@ class _TotalfloatingbalanceState extends State<Totalfloatingbalance> {
                 storeAddress: storeAddress,
                 customerDetails: customerDetails,
                 orderId: orderId.toString(),
+                deliveryCharges: deliveryCharges.toString(),
                 time: time.toString(),
                 totalPrice: status.toString(),
                 orderitems: orderitems,

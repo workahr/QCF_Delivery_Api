@@ -58,6 +58,31 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   // if (Platform.isAndroid) {
+//   //   // Request notification permission on Android 13+
+//   //   if (await Permission.notification.isDenied) {
+//   //     await Permission.notification.request();
+//   //   }
+//   // }
+//   // // Initialize Firebase
+//   // await Firebase.initializeApp();
+
+//   if (!kIsWeb) {
+//     // await FirebaseAPIServices().initNotifications();
+//   }
+
+//   BaseController baseCtrl = Get.put(BaseController());
+
+//   // Ensure the token is retrieved after initialization
+//   // String? token = await FirebaseMessaging.instance.getToken();
+//   // print("token $token");
+
+//   runApp(MyApp());
+// }
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   showNotification(message);
 }

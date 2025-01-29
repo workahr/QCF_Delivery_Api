@@ -16,6 +16,7 @@ class Floatingbalancedetailspage extends StatefulWidget {
   final String time;
   final String totalPrice;
   final String CreatedDate;
+  final String deliveryCharges;
   CustomerAddress customerAddress;
   StoreAddress storeAddress;
   CustomerDetails customerDetails;
@@ -28,6 +29,7 @@ class Floatingbalancedetailspage extends StatefulWidget {
       required this.orderitems,
       required this.orderId,
       required this.time,
+      required this.deliveryCharges,
       required this.CreatedDate,
       required this.totalPrice});
 
@@ -117,6 +119,85 @@ class _FloatingbalancedetailspageState
                 height: 16,
               ),
               //Container
+              // Container(
+              //   padding: const EdgeInsets.all(12),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(12.0),
+              //     border: Border.all(color: AppColors.grey, width: 1.5),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       Column(
+              //         // crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Row(
+              //             children: [
+              //               SubHeadingWidget(
+              //                 title: '${widget.time.toString()} mins',
+              //                 color: AppColors.black,
+              //                 fontSize: 16.0,
+              //               ),
+              //               SizedBox(
+              //                 width: 2,
+              //               ),
+              //               Text('|'),
+              //               SizedBox(
+              //                 width: 2,
+              //               ),
+              //               SubHeadingWidget(
+              //                 title: "Date:${widget.CreatedDate.toString()}",
+              //                 color: AppColors.black,
+              //                 fontSize: 16.0,
+              //               ),
+              //             ],
+              //           ),
+              //           SizedBox(height: 8.0),
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               SubHeadingWidget(
+              //                 title: 'Product Price :',
+              //               ),
+              //               HeadingWidget(
+              //                   title: ((double.tryParse(widget.totalPrice) ??
+              //                               0.0) -
+              //                           (double.tryParse(
+              //                                   widget.deliveryCharges) ??
+              //                               0.0))
+              //                       .toStringAsFixed(2)),
+              //             ],
+              //           ),
+              //           SizedBox(height: 2.0),
+              //           Row(
+              //             children: [
+              //               SubHeadingWidget(
+              //                 title: 'Delivery Charge :',
+              //               ),
+              //               HeadingWidget(
+              //                 title: widget.deliveryCharges.toString(),
+              //               ),
+              //             ],
+              //           ),
+              //           SizedBox(height: 2.0),
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               HeadingWidget(
+              //                 title: 'Total Price :',
+              //               ),
+              //               HeadingWidget(
+              //                 title: widget.totalPrice.toString(),
+              //                 color: AppColors.red,
+              //               ),
+              //             ],
+              //           )
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -125,40 +206,88 @@ class _FloatingbalancedetailspageState
                   border: Border.all(color: AppColors.grey, width: 1.5),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 6),
-                        SubHeadingWidget(
-                          title: '${widget.time.toString()} mins',
-                          color: AppColors.black,
-                          fontSize: 16.0,
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            HeadingWidget(
-                              title: 'Date',
+                    Expanded(
+                      // Ensures Column takes full width
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              SubHeadingWidget(
+                                title: '${widget.time.toString()} mins',
+                                color: AppColors.black,
+                                fontSize: 16.0,
+                              ),
+                              SizedBox(width: 2),
+                              Text('|'),
+                              SizedBox(width: 2),
+                              SubHeadingWidget(
+                                title: "Date: ${widget.CreatedDate.toString()}",
+                                color: AppColors.black,
+                                fontSize: 16.0,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.0),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SubHeadingWidget(
+                                  title: 'Product Price :',
+                                ),
+                                HeadingWidget(
+                                  title: ((double.tryParse(widget.totalPrice) ??
+                                              0.0) -
+                                          (double.tryParse(
+                                                  widget.deliveryCharges) ??
+                                              0.0))
+                                      .toStringAsFixed(2),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            HeadingWidget(
-                              title: widget.CreatedDate.toString(),
+                          ),
+                          SizedBox(height: 2.0),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SubHeadingWidget(
+                                  title: 'Delivery Charge :',
+                                ),
+                                HeadingWidget(
+                                  title: widget.deliveryCharges.toString(),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    ButtonWidget(
-                      title: widget.totalPrice.toString(),
-                      width: 70,
-                      color: AppColors.red,
-                      onTap: () {},
+                          ),
+                          SizedBox(height: 2.0),
+                          SizedBox(
+                            width: double
+                                .infinity, // Forces Row to take full width
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HeadingWidget(
+                                  title: 'Total Price :',
+                                ),
+                                HeadingWidget(
+                                  title: widget.totalPrice.toString(),
+                                  color: AppColors.red,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
+
               SizedBox(
                 height: 16,
               ),

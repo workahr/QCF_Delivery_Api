@@ -22,12 +22,10 @@ class _MainContainerState extends State<MainContainer>
 
   final List pageId = [1, 5, 8, 12, 15];
   static List<Widget> pageOptions = <Widget>[
-    
     HomePage(),
     OrderListPage(),
     TripsListPage(),
     ProfileScreen()
-  
   ];
 
   void _onItemTapped(int index) async {
@@ -35,7 +33,6 @@ class _MainContainerState extends State<MainContainer>
     //   // Handle logout
     //   await _handleLogout();
     // } else {
-    // Handle other navigation
     setState(() {
       _selectedIndex = index;
     });
@@ -55,9 +52,6 @@ class _MainContainerState extends State<MainContainer>
   }
 
   Future<void> _onPop() async {
-    // Handle back button press, you can add custom logic here.
-    // For example, you could show a dialog or exit the app.
-    // Exit the app or return to the home page:
     if (_selectedIndex == 0) {
       // Exit the app if already on the home page.
       return;
@@ -97,9 +91,9 @@ class _MainContainerState extends State<MainContainer>
           items: [
             BottomNavigationBarItem(
               icon: Image.asset(
-                 _selectedIndex == 0
-            ? AppAssets.homeIconSelected // Selected icon
-            : AppAssets.home_icon,
+                _selectedIndex == 0
+                    ? AppAssets.homeIconSelected // Selected icon
+                    : AppAssets.home_icon,
                 height: 25,
                 width: 25,
               ),
@@ -107,12 +101,11 @@ class _MainContainerState extends State<MainContainer>
 
               //   backgroundColor: Color(0xFFE23744)
             ),
-
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Image.asset(
-                 _selectedIndex == 1
-            ? AppAssets.orderIconSelected
-            : AppAssets.orderImg,
+                _selectedIndex == 1
+                    ? AppAssets.orderIconSelected
+                    : AppAssets.orderImg,
                 height: 25,
                 width: 25,
               ),
@@ -121,25 +114,23 @@ class _MainContainerState extends State<MainContainer>
             BottomNavigationBarItem(
               icon: Image.asset(
                 _selectedIndex == 2
-            ? AppAssets.tripIconSelected
-            : AppAssets.tripImg,
+                    ? AppAssets.tripIconSelected
+                    : AppAssets.tripImg,
                 height: 25,
                 width: 25,
               ),
               label: 'Trip',
             ),
-
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Image.asset(
                 _selectedIndex == 3
-            ? AppAssets.profileIconSelected
-            : AppAssets.profileImg,
+                    ? AppAssets.profileIconSelected
+                    : AppAssets.profileImg,
                 height: 25,
                 width: 25,
               ),
               label: 'Profile',
             ),
-           
           ],
           currentIndex: _selectedIndex,
 

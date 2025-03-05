@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
@@ -69,6 +70,28 @@ class _HomePageState extends State<HomePage> {
     return "$formattedTime";
   }
 
+
+  Future<void> updateMultipleOrders(Map<String, String> orderUpdates) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  WriteBatch batch = firestore.batch();
+
+  try {
+    orderUpdates.forEach((documentId, newStatus) {
+      DocumentReference orderRef = firestore.collection('Delivery').doc(documentId);
+      
+      batch.update(orderRef, {
+        'order_status': newStatus,
+        'timestamp': FieldValue.serverTimestamp(), 
+      });
+    });
+
+    await batch.commit();
+    print(" All order statuses updated successfully");
+  } catch (e) {
+    print(" Error updating orders: $e");
+  }
+}
+
   Future getAllDeliveryBoyOrders() async {
     await apiService.getBearerToken();
     setState(() {
@@ -79,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       print("hello1");
       var result = await apiService.getAllDeliveryBoyOrders();
       var response = deliveryOrderListModelFromJson(result);
-      print("hello");
+      print("list load");
       if (response.status.toString() == 'SUCCESS') {
         setState(() {
           orderList = response.list;
@@ -105,11 +128,15 @@ class _HomePageState extends State<HomePage> {
         orderListAll = [];
         isLoading = false;
       });
-      //  showInSnackBar(context, 'Error occurred: $e');
+      print('Error occurred: $e');
+     // showInSnackBar(context, 'Error occurred: $e');
     }
 
     setState(() {});
   }
+
+
+ 
 
   ProfileDetails? profiledetailsList;
   // List<ProfileDetails> profiledetailsListAll = [];
@@ -691,6 +718,9 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
+             updateMultipleOrders({
+        orderId: "Order Picked", 
+      });
             Navigator.push(
               context,
               MaterialPageRoute(

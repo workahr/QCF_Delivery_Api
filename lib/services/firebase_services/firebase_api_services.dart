@@ -21,10 +21,10 @@ class FirebaseAPIServices {
 
   final fbMessaging = FirebaseMessaging.instance;
   AndroidNotificationChannel androidChannel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
+    'high_importance_channel', 
+    'High Importance Notifications', 
     description:
-        'This channel is used for important notifications.', // description
+        'This channel is used for important notifications.', 
     importance: Importance.high,
   );
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

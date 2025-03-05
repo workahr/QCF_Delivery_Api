@@ -371,7 +371,7 @@ class _FloatingbalancedetailspageState
                               style: const TextStyle(
                                   fontSize: 14, color: Colors.black),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
+                              maxLines: 2,
                             )),
                         const SizedBox(height: 4),
                         Text(
@@ -414,7 +414,7 @@ class _FloatingbalancedetailspageState
                               style: const TextStyle(
                                   fontSize: 14, color: Colors.black),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
+                              maxLines: 2,
                             )),
                         const SizedBox(height: 4),
                         Text(

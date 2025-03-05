@@ -87,7 +87,7 @@ class DeliveryOrderList {
     this.store_accept_date,
     required this.items,
     required this.customerAddress,
-   required this.storeAddress,
+    required this.storeAddress,
     required this.customerDetails,
   });
 
@@ -117,14 +117,8 @@ class DeliveryOrderList {
             json["items"].map((x) => OrderItems.fromJson(x))),
         customerAddress: CustomerAddress.fromJson(json["customer_address"]),
         storeAddress: StoreAddress.fromJson(json["store_address"]),
-        // customerDetails: CustomerDetails.fromJson(
-        //     json["customer_details"]), // Parsing new field
-        customerDetails: json["customer_details"] is List && json["customer_details"].isNotEmpty
-    ? CustomerDetails.fromJson(json["customer_details"][0])
-    : json["customer_details"] is Map<String, dynamic>
-        ? CustomerDetails.fromJson(json["customer_details"])
-        : CustomerDetails(id: 0), // Default empty CustomerDetails
-
+        customerDetails: CustomerDetails.fromJson(
+            json["customer_details"]), // Parsing new field
       );
 
   Map<String, dynamic> toJson() => {
@@ -147,7 +141,6 @@ class DeliveryOrderList {
         "delivery_boy_name": deliveryBoyName,
         "delivery_boy_mobile": deliveryBoyMobile,
         "items": List<dynamic>.from(items.map((x) => x.toJson())),
-
         "customer_address": customerAddress.toJson(),
         "store_address": storeAddress.toJson(),
         "customer_details": customerDetails.toJson(),
@@ -167,7 +160,7 @@ class CustomerAddress {
   String? pincode;
   String? addressLine2;
   int? status;
-  DateTime? createdDate;
+  DateTime createdDate;
 
   CustomerAddress({
     required this.id,
@@ -182,7 +175,7 @@ class CustomerAddress {
     this.pincode,
     this.addressLine2,
     this.status,
-     this.createdDate,
+    required this.createdDate,
   });
 
   factory CustomerAddress.fromJson(Map<String, dynamic> json) =>
@@ -215,7 +208,7 @@ class CustomerAddress {
         "pincode": pincode,
         "address_line_2": addressLine2,
         "status": status,
-        "created_date": createdDate!.toIso8601String(),
+        "created_date": createdDate.toIso8601String(),
       };
 }
 
@@ -323,7 +316,7 @@ class StoreAddress {
   int? updatedBy;
   String? updatedDate;
   String? slug;
-  int? storeStatus;
+  int storeStatus;
 
   StoreAddress({
     required this.storeId,
@@ -349,7 +342,7 @@ class StoreAddress {
     this.updatedBy,
     this.updatedDate,
     this.slug,
-     this.storeStatus,
+    required this.storeStatus,
   });
 
   factory StoreAddress.fromJson(Map<String, dynamic> json) => StoreAddress(
@@ -419,7 +412,7 @@ class CustomerDetails {
   int? status;
   int? active;
   int? createdBy;
-  DateTime? createdDate;
+  DateTime createdDate;
   int? updatedBy;
   String? updatedDate;
   String? mobilePushId;
@@ -447,7 +440,7 @@ class CustomerDetails {
     this.status,
     this.active,
     this.createdBy,
-     this.createdDate,
+    required this.createdDate,
     this.updatedBy,
     this.updatedDate,
     this.mobilePushId,
@@ -464,67 +457,35 @@ class CustomerDetails {
     this.pincode,
   });
 
-  // factory CustomerDetails.fromJson(Map<String, dynamic> json) =>
-  //     CustomerDetails(
-  //       id: json["id"],
-  //       username: json["username"],
-  //       password: json["password"],
-  //       fullname: json["fullname"],
-  //       email: json["email"],
-  //       mobile: json["mobile"],
-  //       role: json["role"],
-  //       regOtp: json["reg_otp"],
-  //       status: json["status"],
-  //       active: json["active"],
-  //       createdBy: json["created_by"],
-  //       createdDate: DateTime.parse(json["created_date"]),
-  //       updatedBy: json["updated_by"],
-  //       updatedDate:DateTime.parse( json["updated_date"]),
-  //       mobilePushId: json["mobile_push_id"],
-  //       imageUrl: json["image_url"],
-  //       licenseNo: json["license_no"],
-  //       vehicleNo: json["vehicle_no"],
-  //       vehicleName: json["vehicle_name"],
-  //       licenseFrontImg: json["license_front_img"],
-  //       licenseBackImg: json["license_back_img"],
-  //       vehicleImg: json["vehicle_img"],
-  //       address: json["address"],
-  //       area: json["area"],
-  //       city: json["city"],
-  //       pincode: json["pincode"],
-  //     );
-
-  factory CustomerDetails.fromJson(Map<String, dynamic> json) => CustomerDetails(
-      id: json["id"] ?? 0, // Provide a default value for int
-      username: json["username"] ?? "", // Ensure it's not null
-      password: json["password"] ?? "",
-      fullname: json["fullname"] ?? "",
-      email: json["email"] ?? "",
-      mobile: json["mobile"] ?? "",
-      role: json["role"] ?? 0,
-      regOtp: json["reg_otp"] ?? "",
-      status: json["status"] ?? 0,
-      active: json["active"] ?? 0,
-      createdBy: json["created_by"] ?? 0,
-      createdDate: json["created_date"] != null
-          ? DateTime.parse(json["created_date"])
-          : null, // Handle null safely
-      updatedBy: json["updated_by"] ?? 0,
-      updatedDate:json["updated_date"],
-      mobilePushId: json["mobile_push_id"] ?? "",
-      imageUrl: json["image_url"] ?? "",
-      licenseNo: json["license_no"] ?? "",
-      vehicleNo: json["vehicle_no"] ?? "",
-      vehicleName: json["vehicle_name"] ?? "",
-      licenseFrontImg: json["license_front_img"] ?? "",
-      licenseBackImg: json["license_back_img"] ?? "",
-      vehicleImg: json["vehicle_img"] ?? "",
-      address: json["address"] ?? "",
-      area: json["area"] ?? "",
-      city: json["city"] ?? "",
-      pincode: json["pincode"] ?? "",
-    );
-
+  factory CustomerDetails.fromJson(Map<String, dynamic> json) =>
+      CustomerDetails(
+        id: json["id"],
+        username: json["username"],
+        password: json["password"],
+        fullname: json["fullname"],
+        email: json["email"],
+        mobile: json["mobile"],
+        role: json["role"],
+        regOtp: json["reg_otp"],
+        status: json["status"],
+        active: json["active"],
+        createdBy: json["created_by"],
+        createdDate: DateTime.parse(json["created_date"]),
+        updatedBy: json["updated_by"],
+        updatedDate: json["updated_date"],
+        mobilePushId: json["mobile_push_id"],
+        imageUrl: json["image_url"],
+        licenseNo: json["license_no"],
+        vehicleNo: json["vehicle_no"],
+        vehicleName: json["vehicle_name"],
+        licenseFrontImg: json["license_front_img"],
+        licenseBackImg: json["license_back_img"],
+        vehicleImg: json["vehicle_img"],
+        address: json["address"],
+        area: json["area"],
+        city: json["city"],
+        pincode: json["pincode"],
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -538,7 +499,7 @@ class CustomerDetails {
         "status": status,
         "active": active,
         "created_by": createdBy,
-        "created_date": createdDate!.toIso8601String(),
+        "created_date": createdDate.toIso8601String(),
         "updated_by": updatedBy,
         "updated_date": updatedDate,
         "mobile_push_id": mobilePushId,

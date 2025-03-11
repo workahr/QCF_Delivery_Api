@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namdelivery/widgets/heading_widget.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../constants/app_assets.dart';
 import '../../constants/app_colors.dart';
 import '../../services/comFuncService.dart';
@@ -68,6 +67,27 @@ class _HomePageState extends State<HomePage> {
 
     return "$formattedTime";
   }
+
+
+// Future<void> updateMultipleOrders(Map<String, String> orderUpdates) async {
+//   print("Updating order statuses...");
+//   DatabaseReference databaseRef = FirebaseDatabase.instance.ref("Delivery");
+
+//   try {
+//     Map<String, dynamic> updates = {};
+// print("Updating order");
+//     orderUpdates.forEach((documentId, newStatus) {
+//       updates["$documentId/order_status"] = newStatus;
+//       updates["$documentId/timestamp"] = DateTime.now().toIso8601String();
+//     });
+// print("Updating order1");
+//     await databaseRef.update(updates);
+//     print("All order statuses updated successfully");
+//   } catch (e) {
+//     print("Error updating orders: $e");
+//   }
+// }
+
 
   Future getAllDeliveryBoyOrders() async {
     await apiService.getBearerToken();
@@ -691,10 +711,12 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
+                     
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => OrderDetailsConfirm(
+           
                   orderId: orderId.toString(),
                   customerAddress: customerAddress,
                   customerDetails: customerDetails,
